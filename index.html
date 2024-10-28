@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人中心</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a href="index.html" id="back-button">
+    <span class="back-text">返回</span>
+  </a>
+
+  <div class="profile-container">
+    <div class="left-column">
+      <a href="#" id="avatar-link">
+        <img src="images/avatar.jpg" alt="用户头像" class="avatar" id="avatar">
+      </a>
+      <h2 class="nickname">昵称</h2>
+      <p class="user-id">ID: 123456789</p>
+      <div class="signature">
+        <label for="signature-input">个性签名：</label>
+        <br>
+        <textarea id="signature-input" placeholder="这里填写个性签名..."></textarea>
+      </div>
+    </div>
+    <div class="right-column">
+      <div class="progress-section">
+        <div class="progress-text">已体验进度: </div>
+        <div class="circular-progress" data-percentage="66.6">
+          <span>66.6%</span>
+          <div class="progress-bar"></div>
+          <div class="progress-border"></div>
+        </div>
+      </div>
+      <div class="achievements">
+        <p>诗词大会称号: <span class="calligraphy">初学吟咏</span></p>
+        <div class="works-section">
+          <p>藏有佳作: 6/18</p>
+          <button type="button" onclick="window.location.href='gallery.html'">前往画廊 ></button>
+        </div>
+        <div class="gallery-preview">
+          <a href="images/work1.jpg" target="_blank"><img src="images/work1.jpg" alt="作品1" class="work-thumbnail"></a>
+          <a href="images/work2.jpg" target="_blank"><img src="images/work2.jpg" alt="作品2" class="work-thumbnail"></a>
+          <a href="images/work3.jpg" target="_blank"><img src="images/work3.jpg" alt="作品3" class="work-thumbnail"></a>
+        </div>
+        <div class="endings-section">
+          <p>达成结局: 3/6</p>
+          <button type="button" onclick="window.location.href='endings.html'">查看结局 ></button>
+        </div>
+        <div class="endings-preview">
+          <a href="images/ending1.jpg" target="_blank"><img src="images/ending1.jpg" alt="结局1" class="ending-thumbnail"></a>
+          <a href="images/ending2.jpg" target="_blank"><img src="images/ending2.jpg" alt="结局2" class="ending-thumbnail"></a>
+          <a href="images/ending3.jpg" target="_blank"><img src="images/ending3.jpg" alt="结局3" class="ending-thumbnail"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="scripts.js"></script>
+</body>
+</html>
