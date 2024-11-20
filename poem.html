@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <style type="text/css">
+        body {
+            background-image: url("web01.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .header {
+            position: absolute;
+            top: 30px;
+            left: 30px; 
+        }
+        .right-header {
+            position: absolute;
+            top: 30px;
+            right: 30px; 
+            display: flex;
+            gap: 10px;
+        }
+        .timu1 {
+            text-align: center;
+            margin: 0 auto;
+            font-size: 4vw; 
+        }
+        .daan1 {
+            text-align: left;
+            padding-left: 5vw; 
+            font-size: 3vw;
+        }
+        .navigation {
+            position: absolute;
+            bottom: 30px;
+            display: flex;
+            justify-content: space-between; 
+            width: 80%; 
+        }
+        button {
+            font-size: 3vw; 
+            color: black;
+            font-family: '华文细黑', sans-serif;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button onclick="window.location.href='homePage.html'">返回</button>
+    </div>
+    <div class="right-header">
+        <button onclick="window.location.href='personalCenter.html'">个人中心</button>
+    </div>
+    <div class="timu1">
+        <div>“人有悲欢离合，月有阴晴圆缺，</div>
+        <div>此事古难全。”的下一句是？</div>
+    </div>
+    <div class="daan1">
+        <div><button>A 但愿人长久，千里共婵娟</button></div>
+        <div><button>B 人生如梦，一尊还酹江月</button></div>
+        <div><button>C 与买桂花同载酒，终不似，少年游</button></div>
+        <div><button>D 床前明月光，疑是地上霜</button></div>
+    </div>
+    <div class="navigation">
+        <button onclick="window.location.href='previousQuestion.html'">上一题</button>
+        <button onclick="alert('答案已提交')">提交</button>
+        <button onclick="window.location.href='textAdventure.html'">下一题</button>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

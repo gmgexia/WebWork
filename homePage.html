@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏首页</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 75%;
+            background: url('images/background.png');
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 2% 5%;
+        }
+        .nav-button {
+            background-color: transparent;
+            border: none;
+            font-family: '新宋体', sans-serif;
+            font-size: 24px;
+            color: #553425;
+            cursor: pointer;
+            padding: 1% 2%;
+            border-radius: 5px;
+            transition: text-decoration 0.3s;
+        }
+        .shell-container {
+            bottom-margin: 5%;
+        }
+        .slogan2-ul {
+            padding-bottom: 5%;
+        }
+        .slogan2 {
+            text-align: center;
+            font-size: 25px;
+            color: #553425;
+        }
+        .shell {
+            width: 70%;
+            height: 70%;
+            display: flex;
+            margin: auto;
+        }
+        .box-a {
+            flex: 1;
+            overflow: hidden;
+            transition: .5s;
+            margin: 0 20px;
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, .5);
+            border-radius: 20px;
+            border: 10px solid #fff;
+            background-color: #fff;
+            position: relative;
+        }
+        .box-a img {
+            width: 150%;
+            height: 70%;
+            object-fit: cover;
+            transition: .5s;
+        }
+        .box-a span {
+            font: 200 20px '优设标题黑';
+            text-align: center;
+            height: 15%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+        }
+        .box-a:hover {
+            flex-basis: 40%;
+        }
+        .box-a:hover img {
+            width: 100%;
+            height: 70%;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-buttons">
+        <button class="nav-button" onclick="goBack()">返回</button>
+        <button class="nav-button" onclick="navigateTo('personal-center')">个人中心</button>
+    </div>
+    <div class="shell-container">
+        <ul class="slogan2-ul">
+            <li class="slogan2">探索宋韵</li>
+        </ul>
+        <div class="shell">
+            <div class="box-a" onclick="navigateTo('game1')">
+                <img src="https://img.alicdn.com/tfs/TB1GnYKmQvoK1RjSZFNXXcxMVXa-640-400.jpg" alt="Game 1">
+                <span>诗词大会</span>
+            </div>
+            <div class="box-a" onclick="navigateTo('game2')">
+                <img src="https://img.alicdn.com/tfs/TB1GnYKmQvoK1RjSZFNXXcxMVXa-640-400.jpg" alt="Game 2">
+                <span>名胜采风</span>
+            </div>
+            <div class="box-a" onclick="navigateTo('game3')">
+                <img src="https://img.alicdn.com/tfs/TB1GnYKmQvoK1RjSZFNXXcxMVXa-640-400.jpg" alt="Game 3">
+                <span>梦回宋朝</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function navigateTo(page) {
+            switch (page) {
+                case 'game1':
+                    window.location.href = 'poem.html';
+                    break;
+                case 'game2':
+                    window.location.href = 'game2.html';
+                    break;
+                case 'game3':
+                    window.location.href = 'textAdventure.html';
+                    break;
+                case 'personal-center':
+                    window.location.href = 'personalCenter.html';
+                    break;
+                default:
+                    console.log('Page not found');
+            }
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>
+
+
+
