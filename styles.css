@@ -7,7 +7,6 @@
          background: url('images/background.png') no-repeat center center fixed; /* 全局背景 */
          background-size: cover;
          font-size: 18px;
-         display: flex;
          justify-content: center;
          align-items: center;
      }
@@ -113,14 +112,14 @@
   display: flex;
   justify-content: space-between;
   align-items: stretch;
-  min-height: 100vh;
-  padding: 20px;
+  height: 100%;
+  padding: 2%;
   box-sizing: border-box;
   gap: 20px;
 }
 
 .left-column, .right-column {
-  padding: 40px;
+  padding: 0% 5%;
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -164,7 +163,7 @@
 
 .signature textarea {
   width: 100%;
-  min-height: 300px;
+  height: 300%;
   padding: 10px;
   border: 2px solid #ccc;
   border-radius: 5px;
@@ -194,7 +193,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
   width: 100%;
 }
 
