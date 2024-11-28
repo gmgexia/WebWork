@@ -1,10 +1,78 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>网站引导首页</title>
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网站引导首页</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 30%;
+            text-align: center;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .auth-links {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: brown;
+            font-size: 18px;
+        }
+        .auth-links a {
+            margin-left: 10px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .logout-button {
+            margin-left: 10px;
+            cursor: pointer;
+            text-decoration: underline;
+            color: brown;
+        }
+    </style>
 </head>
 <body>
 <div class="page-container">
@@ -13,7 +81,159 @@
         <img src="宋.png" alt="Top Left Icon" class="icon-top-left">
         <img src="韵.png" alt="Bottom Right Icon" class="icon-bottom-right">
     </div>
-	<button class="arrow-button" onclick="window.location.href='homePage.html'">></button>
+    <button class="arrow-button" onclick="handleArrowClick()">></button>
+    <div class="auth-links" id="authLinks">
+        <a onclick="openModal('login')">登录</a>
+        <a onclick="openModal('register')">注册</a>
+    </div>
+    <div class="auth-links" id="userDetails" style="display: none;">
+        <span id="userInfo"></span>
+        <a class="logout-button" onclick="logout()">登出</a>
+    </div>
 </div>
+
+<!-- Login Modal -->
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>登录</h2>
+        <div class="form-group">
+            <label for="loginNickname">昵称:</label>
+            <input type="text" id="loginNickname" required>
+        </div>
+        <div class="form-group">
+            <label for="loginPassword">密码:</label>
+            <input type="password" id="loginPassword" required>
+        </div>
+        <button onclick="login()">登录</button>
+        <p><a onclick="openModal('register')">还没有账号？前往注册</a></p>
+    </div>
+</div>
+
+<!-- Register Modal -->
+<div id="registerModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>注册</h2>
+        <div class="form-group">
+            <label for="regNickname">昵称:</label>
+            <input type="text" id="regNickname" required>
+        </div>
+        <div class="form-group">
+            <label for="regPassword">密码:</label>
+            <input type="password" id="regPassword" required>
+        </div>
+        <button onclick="register()">注册</button>
+        <p><a onclick="openModal('login')">已有账号？前往登录</a></p>
+    </div>
+</div>
+
+<script>
+    let users = [];
+    let nextId = 10001;
+    let currentUser = null;
+
+    function openModal(type) {
+        if (type === 'login') {
+            document.getElementById('loginModal').style.display = 'block';
+        } else if (type === 'register') {
+            document.getElementById('registerModal').style.display = 'block';
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('registerModal').style.display = 'none';
+    }
+
+    function register() {
+        const nickname = document.getElementById('regNickname').value;
+        const password = document.getElementById('regPassword').value;
+
+        if (!validateNickname(nickname)) {
+            alert('昵称不能为空且不能重复');
+            return;
+        }
+
+        if (!validatePassword(password)) {
+            alert('密码必须至少包含6位数字和字母，区分大小写');
+            return;
+        }
+
+        const user = {
+            id: nextId++,
+            nickname: nickname,
+            password: password,
+            signature: "这个人很神秘，什么也没有留下",
+            progress: "0%",
+            title: "初学吟咏",
+            unlockedArtworks: [],
+            unlockedEndings: []
+        };
+
+        users.push(user);
+        console.log(JSON.stringify(users, null, 2));
+        alert('注册成功！');
+        closeModal();
+    }
+
+    function login() {
+        const nickname = document.getElementById('loginNickname').value;
+        const password = document.getElementById('loginPassword').value;
+
+        const user = users.find(u => u.nickname === nickname && u.password === password);
+
+        if (user) {
+            currentUser = user;
+            updateAuthLinks();
+            alert('登录成功！');
+            closeModal();
+        } else {
+            alert('用户名或密码错误');
+        }
+    }
+
+    function logout() {
+        currentUser = null;
+        updateAuthLinks();
+        alert('已登出');
+    }
+
+    function validateNickname(nickname) {
+        return nickname && !users.some(u => u.nickname === nickname);
+    }
+
+    function validatePassword(password) {
+        const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+        return regex.test(password);
+    }
+
+    function updateAuthLinks() {
+        const authLinks = document.getElementById('authLinks');
+        const userDetails = document.getElementById('userDetails');
+        const userInfo = document.getElementById('userInfo');
+
+        if (currentUser) {
+            authLinks.style.display = 'none';
+            userDetails.style.display = 'block';
+            userInfo.innerText = `${currentUser.nickname} ${currentUser.id}`;
+        } else {
+            authLinks.style.display = 'block';
+            userDetails.style.display = 'none';
+        }
+    }
+
+    function handleArrowClick() {
+        if (currentUser) {
+            window.location.href = 'homePage.html';
+        } else {
+            openModal('login');
+        }
+    }
+    updateAuthLinks();
+</script>
 </body>
 </html>
+
+
+
