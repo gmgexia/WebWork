@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>网页示例</title>
+    <meta name="description" content="穿越到宋朝，在汴梁和临安之间选择诉说它们的历史与故事。">
     <style>
         body, html {
             margin: 0;
@@ -81,11 +82,43 @@
         .back-button:hover {
             background: rgba(0, 0, 0, 0.9);
         }
+
+        .profile-picture {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid white;
+        }
+
+        .profile-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @media (max-width: 768px) {
+            .options a {
+                padding: 20px 100px;
+                font-size: 1.2em; 
+            }
+
+            .profile-picture {
+                width: 50px;
+                height: 50px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="background"></div>
     <a href="javascript:history.back()" class="back-button">返回</a>
+    <a href="personalCenter.html" class="profile-picture">
+        <img src="images/avatar.jpg" alt="用户头像">
+    </a>
     <div class="text-container">
         <h2>待诉说的故事</h2>
         <p>假如你穿越到了宋朝，在汴梁和临安之间，你会选择哪一座城市去诉说它们的历史与故事？

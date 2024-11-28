@@ -9,13 +9,13 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            height: 75%;
-            background: url('images/background.png');
+            height: 100vh; /* 设置高度为视口高度 */
+            background: url('images/background.png') no-repeat center center / cover;
         }
         .nav-buttons {
             display: flex;
             justify-content: space-between;
-            padding: 2% 5%;
+            padding: 2% 5% 0% 5%;
         }
         .nav-button {
             background-color: transparent;
@@ -32,7 +32,8 @@
             bottom-margin: 5%;
         }
         .slogan2-ul {
-            padding-bottom: 5%;
+            padding-bottom: 2%;
+			list-style-type: none;
         }
         .slogan2 {
             text-align: center;
@@ -83,12 +84,29 @@
             width: 100%;
             height: 70%;
         }
+		.profile-picture {
+		    position: absolute;
+		    top: 20px;
+		    right: 20px;
+		    width: 70px;
+		    height: 70px;
+		    border-radius: 50%;
+		    overflow: hidden;
+		    border: 2px solid white;
+		}
+		.profile-picture img {
+		    width: 100%;
+		    height: 100%;
+		    object-fit: cover;
+		}
     </style>
 </head>
 <body>
     <div class="nav-buttons">
         <button class="nav-button" onclick="goBack()">返回</button>
-        <button class="nav-button" onclick="navigateTo('personal-center')">个人中心</button>
+        <a href="personalCenter.html" class="profile-picture">
+            <img src="images/avatar.jpg" alt="用户头像">
+        </a>
     </div>
     <div class="shell-container">
         <ul class="slogan2-ul">
@@ -117,7 +135,7 @@
                     window.location.href = 'poem.html';
                     break;
                 case 'game2':
-                    window.location.href = 'game2.html';
+                    window.location.href = 'map.html';
                     break;
                 case 'game3':
                     window.location.href = 'textAdventure.html';

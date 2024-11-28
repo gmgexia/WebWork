@@ -1,90 +1,357 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
+
 <head>
-    <title></title>
-    <meta charset="utf-8" />
-    <style type="text/css">
+    <meta charset="utf-8">
+    <title>测测你，宋词知多少？</title>
+    <link rel="stylesheet" href="css/yy.css" type="">
+    <style>
         body {
-            background-image: url("web01.jpg");
-            background-repeat: no-repeat;
+            background-image: url('web01.jpg');
             background-size: cover;
+            text-align: center; 
             margin: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+            padding: 0;
         }
-        .header {
-            position: absolute;
-            top: 30px;
-            left: 30px; 
-        }
-        .right-header {
-            position: absolute;
-            top: 30px;
-            right: 30px; 
-            display: flex;
-            gap: 10px;
-        }
-        .timu1 {
-            text-align: center;
-            margin: 0 auto;
-            font-size: 4vw; 
-        }
-        .daan1 {
+
+
+        h3, h4 {
             text-align: left;
-            padding-left: 5vw; 
-            font-size: 3vw;
+            margin-left: 20px; 
+            display: inline-block; 
+            font-size: 1.5rem; 
         }
-        .navigation {
-            position: absolute;
-            bottom: 30px;
+
+        h4 {
+            font-size: 1.25rem; 
+        }
+
+
+        .Page_content {
             display: flex;
-            justify-content: space-between; 
-            width: 80%; 
+            justify-content: center;
+            align-items: center; 
+            height: 100vh; 
         }
-        button {
-            font-size: 3vw; 
-            color: black;
-            font-family: '华文细黑', sans-serif;
-            border: none;
-            background-color: transparent;
+
+
+        .Content1 {
+            width: 90%; 
+            padding: 20px;
+        }
+
+
+        #change {
+            position: fixed;
+            bottom: 10px;
+            left: 0; 
+            width: 100%; 
+            text-align: center; 
+        }
+
+        #change ul {
+            list-style: none; 
+            margin: 0;
+            padding: 0; 
+        }
+
+        #change li {
+            display: inline-block; 
+            margin: 0 20px; 
+        }
+
+        #change h4 {
             cursor: pointer;
+            margin: 0; 
+            padding: 10px 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
         }
+        .butt3 {
+    font-size: 1.25rem; 
+    padding: 12px 24px; 
+    background-color: #4CAF50;
+    color: white; 
+    border: none; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    transition: background-color 0.3s; 
+}
+
+.butt3:hover {
+    background-color: #45a049; 
+}
+        .profile-picture {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid white;
+        }
+
+        .profile-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+		.back-button {
+		    position: absolute;
+		    top: 20px;
+		    left: 20px;
+		    text-decoration: none;
+		    color: white;
+		    background: rgba(0, 0, 0, 0.7);
+		    padding: 10px 20px;
+		    border-radius: 5px;
+		    text-align: center;
+		}
+		
+		.back-button:hover {
+		    background: rgba(0, 0, 0, 0.9);
+		}
+		
     </style>
+
+    <script type="text/javascript">
+        var result1 = 'A';
+        var result2 = 'C';
+        var result3 = 'B';
+
+        function check1() {
+            var obj = document.getElementsByName("practise");
+            var list = document.getElementsByClassName("test1")[0];
+            for (var i = 0; i < obj.length; i++) {
+                if (obj[i].checked) {
+                    if (obj[i].value == result1)
+                        list.getElementsByClassName("res1")[0].innerHTML = "<h3>回答正确！</h3>";
+                    else
+                        list.getElementsByClassName("res1")[0].innerHTML = "<h3>回答错误！答案是A！</h3>";
+                }
+            }
+        }
+
+        function check2() {
+            var obj = document.getElementsByName("practise");
+            var list = document.getElementsByClassName("test2")[0];
+            for (var i = 0; i < obj.length; i++) {
+                if (obj[i].checked) {
+                    if (obj[i].value == result2)
+                        list.getElementsByClassName("res2")[0].innerHTML = "<h3>回答正确！</h3>";
+                    else
+                        list.getElementsByClassName("res2")[0].innerHTML = "<h3>回答错误！答案是C！</h3>";
+                }
+            }
+        }
+
+        function check3() {
+            var obj = document.getElementsByName("practise");
+            var list = document.getElementsByClassName("test3")[0];
+            for (var i = 0; i < obj.length; i++) {
+                if (obj[i].checked) {
+                    if (obj[i].value == result3)
+                        list.getElementsByClassName("res3")[0].innerHTML = "<h3>回答正确！</h3>";
+                    else
+                        list.getElementsByClassName("res3")[0].innerHTML = "<h3>回答错误！答案是B！</h3>";
+                }
+            }
+        }
+
+        function check4() {
+            var obj = document.getElementsByName("practise");
+            var list = document.getElementsByClassName("test4")[0];
+            for (var i = 0; i < obj.length; i++) {
+                if (obj[i].checked) {
+                    if (obj[i].value == result2)
+                        list.getElementsByClassName("res2")[0].innerHTML = "<h3>回答正确！</h3>";
+                    else
+                        list.getElementsByClassName("res2")[0].innerHTML = "<h3>回答错误！答案是C！</h3>";
+                }
+            }
+        }
+
+        function check5() {
+            var obj = document.getElementsByName("practise");
+            var list = document.getElementsByClassName("test5")[0];
+            for (var i = 0; i < obj.length; i++) {
+                if (obj[i].checked) {
+                    if (obj[i].value == result2)
+                        list.getElementsByClassName("res2")[0].innerHTML = "<h3>回答正确！</h3>";
+                    else
+                        list.getElementsByClassName("res2")[0].innerHTML = "<h3>回答错误！答案是C！</h3>";
+                }
+            }
+        }
+
+        function show1() {
+            document.getElementsByClassName("test1")[0].style.display = "block";
+            document.getElementsByClassName("test2")[0].style.display = "none";
+            document.getElementsByClassName("test3")[0].style.display = "none";
+            document.getElementsByClassName("test4")[0].style.display = "none";
+            document.getElementsByClassName("test5")[0].style.display = "none";
+        }
+
+        function show2() {
+            document.getElementsByClassName("test2")[0].style.display = "block";
+            document.getElementsByClassName("test1")[0].style.display = "none";
+            document.getElementsByClassName("test3")[0].style.display = "none";
+            document.getElementsByClassName("test4")[0].style.display = "none";
+            document.getElementsByClassName("test5")[0].style.display = "none";
+        }
+
+        function show3() {
+            document.getElementsByClassName("test3")[0].style.display = "block";
+            document.getElementsByClassName("test1")[0].style.display = "none";
+            document.getElementsByClassName("test2")[0].style.display = "none";
+            document.getElementsByClassName("test4")[0].style.display = "none";
+            document.getElementsByClassName("test5")[0].style.display = "none";
+        }
+
+        function show4() {
+            document.getElementsByClassName("test3")[0].style.display = "none";
+            document.getElementsByClassName("test1")[0].style.display = "none";
+            document.getElementsByClassName("test2")[0].style.display = "none";
+            document.getElementsByClassName("test4")[0].style.display = "block";
+            document.getElementsByClassName("test5")[0].style.display = "none";
+        }
+
+        function show5() {
+            document.getElementsByClassName("test3")[0].style.display = "none";
+            document.getElementsByClassName("test1")[0].style.display = "none";
+            document.getElementsByClassName("test2")[0].style.display = "none";
+            document.getElementsByClassName("test4")[0].style.display = "none";
+            document.getElementsByClassName("test5")[0].style.display = "block";
+        }
+    </script>
 </head>
+
 <body>
-    <div class="header">
-        <button onclick="window.location.href='homePage.html'">返回</button>
-    </div>
-    <div class="right-header">
-        <button onclick="window.location.href='personalCenter.html'">个人中心</button>
-    </div>
-    <div class="timu1">
-        <div>“人有悲欢离合，月有阴晴圆缺，</div>
-        <div>此事古难全。”的下一句是？</div>
-    </div>
-    <div class="daan1">
-        <div><button>A 但愿人长久，千里共婵娟</button></div>
-        <div><button>B 人生如梦，一尊还酹江月</button></div>
-        <div><button>C 与买桂花同载酒，终不似，少年游</button></div>
-        <div><button>D 床前明月光，疑是地上霜</button></div>
-    </div>
-    <div class="navigation">
-        <button onclick="window.location.href='previousQuestion.html'">上一题</button>
-        <button onclick="alert('答案已提交')">提交</button>
-        <button onclick="window.location.href='textAdventure.html'">下一题</button>
+    <div class="Page_content">
+	<a href="javascript:history.back()" class="back-button">返回</a>
+	<a href="personalCenter.html" class="profile-picture">
+	    <img src="images/avatar.jpg" alt="用户头像">
+	</a>>
+        <div class="Content1">
+            <div id="test_header">
+                <h3>让我测测你，宋词知多少？</h3>
+            </div>
+            <div id="small_test">
+                <div class="test1">
+                    <form>
+                        <br>
+                        <h3>1、“三十功名尘与土”的后一句</h3><br>
+                        <h4><input type="radio" name="practise" value="A">A.&nbsp;&nbsp;八千里路云和月</h4><br>
+                        <h4><input type="radio" name="practise" value="B">B.&nbsp;&nbsp;笑谈渴饮匈奴血</h4><br>
+                        <h4><input type="radio" name="practise" value="C">C.&nbsp;&nbsp;起来独自绕阶行</h4><br>
+                        <h4><input type="button" class="butt3"  onclick="check1()" value="  提交  "></h4>
+                    </form>
+                    <div class="res1"></div>
+                    <div id="change">
+                        <ul>
+                            <li>
+                                <h4>前面没有了捏</h4>
+                            </li>
+                            <li onclick="show2()">
+                                <h4>下一题</h4>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="test2" style="display:none;">
+                    <form>
+                        <br>
+                        <h3>2、“不知天上宫阙”的后一句</h3><br>
+                        <h4><input type="radio" name="practise" value="A">A.&nbsp;&nbsp;我欲乘风归去</h4><br>
+                        <h4><input type="radio" name="practise" value="B">B.&nbsp;&nbsp;高处不胜寒</h4><br>
+                        <h4><input type="radio" name="practise" value="C">C.&nbsp;&nbsp;今夕是何年</h4><br>
+                        <h4><input type="button" class="butt3" onclick="check2()" value="提交"></h4>
+                    </form>
+                    <div class="res2"></div>
+                    <div id="change">
+                        <ul>
+                            <li onclick="show1()">
+                                <h4>上一题</h4>
+                            </li>
+                            <li onclick="show4()">
+                                <h4>下一题</h4>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="test4" style="display:none;">
+                    <form>
+                        <br>
+                        <h3>3、“两重心字罗衣”的前一句</h3><br>
+                        <h4><input type="radio" name="practise" value="A">A.&nbsp;&nbsp;床前明月光</h4><br>
+                        <h4><input type="radio" name="practise" value="B">B.&nbsp;&nbsp;江东子弟多才俊</h4><br>
+                        <h4><input type="radio" name="practise" value="C">C.&nbsp;&nbsp;记得小萍初见</h4><br>
+                        <h4><input type="button" class="butt3" onclick="check4()" value="提交"></h4>
+                    </form>
+                    <div class="res2"></div>
+                    <div id="change">
+                        <ul>
+                            <li onclick="show2()">
+                                <h4>上一题</h4>
+                            </li>
+                            <li onclick="show5()">
+                                <h4>下一题</h4>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="test5" style="display:none;">
+                    <form>
+                        <br>
+                        <h3>4、“两情若是久长时”的后一句</h3><br>
+                        <h4><input type="radio" name="practise" value="A">A.&nbsp;&nbsp;银汉迢迢暗度</h4><br>
+                        <h4><input type="radio" name="practise" value="B">B.&nbsp;&nbsp;便胜却人间无数</h4><br>
+                        <h4><input type="radio" name="practise" value="C">C.&nbsp;&nbsp;又岂在朝朝暮暮</h4><br>
+                        <h4><input type="button" class="butt3" onclick="check5()" value="提交"></h4>
+                    </form>
+                    <div class="res2"></div>
+                    <div id="change">
+                        <ul>
+                            <li onclick="show4()">
+                                <h4>上一题</h4>
+                            </li>
+                            <li onclick="show3()">
+                                <h4>下一题</h4>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="test3" style="display:none;">
+                    <form>
+                        <br>
+                        <h3>5、“只有香如故”的前一句</h3><br>
+                        <h4><input type="radio" name="practise" value="A">A.&nbsp;&nbsp;空悲切</h4><br>
+                        <h4><input type="radio" name="practise" value="B">B.&nbsp;&nbsp;零落成泥碾作尘</h4><br>
+                        <h4><input type="radio" name="practise" value="C">C.&nbsp;&nbsp;怎一个愁字了得</h4><br>
+                        <h4><input type="button" class="butt3" onclick="check3()" value="提交"></h4>
+                    </form>
+                    <div class="res3"></div>
+                    <div id="change">
+                        <ul>
+                            <li onclick="show2()">
+                                <h4>上一题</h4>
+                            </li>
+                            <li>
+                                <h4>后面没有了捏</h4>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
 </body>
+
 </html>
-
-
-
-
-
-
-
-
 
