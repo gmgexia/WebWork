@@ -13,6 +13,7 @@
             background-repeat: no-repeat; 
             margin: 0;
             padding: 0;
+            transition: background-blur 2s ease-in-out;
         }
         #map {
             position: relative;
@@ -33,6 +34,11 @@
             padding: 10px 20px;
             cursor: pointer;
             z-index: 10;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .location-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
         }
         #weather {
             font-size: 24px;
@@ -41,6 +47,11 @@
             border-radius: 5px;
             display: inline-block;
             z-index: 1;
+            animation: fadeIn 2s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         .modal {
             display: none;
@@ -60,6 +71,11 @@
             border: 1px solid #888;
             width: 30%;
             text-align: center;
+            animation: slideIn 0.5s ease-in-out forwards;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-20%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         .close {
             color: #aaa;
@@ -83,6 +99,7 @@
 		    padding: 10px 20px;
 		    border-radius: 5px;
 		    text-align: center;
+		    transition: background-color 0.3s ease;
 		}
 		
 		.back-button:hover {
@@ -98,6 +115,11 @@
 		    border-radius: 50%;
 		    overflow: hidden;
 		    border: 2px solid white;
+		    transition: transform 0.3s ease;
+		}
+		
+		.profile-picture:hover {
+		    transform: rotate(360deg);
 		}
 		
 		.profile-picture img {
@@ -105,7 +127,6 @@
 		    height: 100%;
 		    object-fit: cover;
 		}
-		
     </style>
 </head>
 <body>
