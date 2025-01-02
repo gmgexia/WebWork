@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>宋瓷欣赏环节</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #2c3e50;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+      position: relative;
+    }
+
+    nav h1 {
+      margin: 0;
+    }
+
+    /* 返回按钮样式 */
+    .back-button {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      padding: 5px 10px;
+      background-color: #34495e;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+
+    .back-button:hover {
+      background-color: #2c3e50;
+    }
+
+    #ceramic-display {
+      display: flex;
+      justify-content: space-around;
+      padding: 20px;
+      flex-wrap: wrap;
+    }
+
+    .ceramic-item {
+      text-align: center;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    .ceramic-item img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    #ceramic-details {
+      padding: 20px;
+      background-color: #fff;
+      margin-top: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #2c3e50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #34495e;
+    }
+  </style>
+</head>
+<body>
+  <!-- 顶部导航栏 -->
+  <header>
+    <!-- 返回按钮 -->
+    <button class="back-button" onclick="window.location.href='ex-page2.html'">返回</button>
+    <nav>
+      <h1>宋瓷欣赏</h1>
+    </nav>
+  </header>
+
+  <!-- 宋瓷展示区 -->
+  <section id="ceramic-display">
+    <h2>宋代瓷器</h2>
+    <div class="ceramic-item" onclick="showCeramicDetails('汝窑')">
+      <img src="ruyao.jpg" alt="汝窑瓷器">
+      <p>汝窑</p>
+    </div>
+    <div class="ceramic-item" onclick="showCeramicDetails('官窑')">
+      <img src="guanyao.jpg" alt="官窑瓷器">
+      <p>官窑</p>
+    </div>
+    <div class="ceramic-item" onclick="showCeramicDetails('定窑')">
+      <img src="dingyao.jpg" alt="定窑瓷器">
+      <p>定窑</p>
+    </div>
+  </section>
+
+  <!-- 宋瓷详情 -->
+  <section id="ceramic-details">
+    <h2>瓷器详情</h2>
+    <p id="ceramic-description">点击选择一种瓷器了解更多</p>
+    <button onclick="startCeramicChallenge()">了解更多</button>
+  </section>
+
+  <script>
+    // 宋瓷的详细信息
+    const ceramicDetails = {
+      '汝窑': {
+        description: '汝窑是宋代五大名窑之一，因其瓷器釉色如天蓝般明亮，且造型精美，被称为“宋代第一窑”。汝窑的釉色和纹理在瓷器中独具特色。',
+        history: '汝窑的制作技艺流传至今，至今仍被视为瓷器中的珍品，尤其在北宋时期最为著名。'
+      },
+      '官窑': {
+        description: '官窑瓷器是在宋代专为皇宫制作的瓷器，工艺精湛，釉色温润，色泽明亮。官窑瓷器的造型和装饰极为考究。',
+        history: '官窑瓷器主要用于皇家生活的日常器具，并成为宫廷文化的重要象征。'
+      },
+      '定窑': {
+        description: '定窑是宋代著名的白瓷窑之一，以其洁白的瓷釉和精美的刻花工艺闻名，瓷器表面常常装饰着精细的花纹。',
+        history: '定窑瓷器的历史悠久，影响深远，尤其以精美的瓷板和碗最为出名。'
+      }
+    };
+
+    // 显示瓷器详情
+    function showCeramicDetails(ceramicName) {
+      const details = ceramicDetails[ceramicName];
+      document.getElementById('ceramic-description').innerHTML = `
+        <strong>名称：</strong>${ceramicName}<br>
+        <strong>介绍：</strong>${details.description}<br>
+        <strong>历史背景：</strong>${details.history}
+      `;
+    }
+
+    // 了解更多功能
+    function startCeramicChallenge() {
+      alert('通过这个环节，你可以了解更多有关宋代瓷器的知识！');
+    }
+  </script>
+</body>
+</html>

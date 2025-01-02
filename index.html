@@ -129,8 +129,6 @@
 </div>
 
 <script>
-    let users = [];
-    let nextId = 10001;
     let currentUser = null;
 
     function openModal(type) {
@@ -146,7 +144,7 @@
         document.getElementById('registerModal').style.display = 'none';
     }
 
-    function register() {
+    async function register() {
         const nickname = document.getElementById('regNickname').value;
         const password = document.getElementById('regPassword').value;
 
@@ -160,47 +158,58 @@
             return;
         }
 
-        const user = {
-            id: nextId++,
-            nickname: nickname,
-            password: password,
-            signature: "这个人很神秘，什么也没有留下",
-            progress: "0%",
-            title: "初学吟咏",
-            unlockedArtworks: [],
-            unlockedEndings: []
-        };
+        const response = await fetch('http://localhost:5000/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username: nickname, password })
+        });
 
-        users.push(user);
-        console.log(JSON.stringify(users, null, 2));
-        alert('注册成功！');
-        closeModal();
+        const data = await response.json();
+
+        if (response.ok) {
+            alert(data.message);
+            closeModal();
+        } else {
+            alert(data.message);
+        }
     }
 
-    function login() {
+    async function login() {
         const nickname = document.getElementById('loginNickname').value;
         const password = document.getElementById('loginPassword').value;
 
-        const user = users.find(u => u.nickname === nickname && u.password === password);
+        const response = await fetch('http://localhost:5000/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username: nickname, password })
+        });
 
-        if (user) {
-            currentUser = user;
+        const data = await response.json();
+
+        if (response.ok) {
+            currentUser = data.user;
+            localStorage.setItem('token', data.token);
             updateAuthLinks();
-            alert('登录成功！');
+            alert(data.message);
             closeModal();
         } else {
-            alert('用户名或密码错误');
+            alert(data.message);
         }
     }
 
     function logout() {
         currentUser = null;
+        localStorage.removeItem('token');
         updateAuthLinks();
         alert('已登出');
     }
 
     function validateNickname(nickname) {
-        return nickname && !users.some(u => u.nickname === nickname);
+        return nickname.trim() !== '';
     }
 
     function validatePassword(password) {
@@ -216,7 +225,7 @@
         if (currentUser) {
             authLinks.style.display = 'none';
             userDetails.style.display = 'block';
-            userInfo.innerText = `${currentUser.nickname} ${currentUser.id}`;
+            userInfo.innerText = `${currentUser.username} (${currentUser.id})`;
         } else {
             authLinks.style.display = 'block';
             userDetails.style.display = 'none';
@@ -230,7 +239,29 @@
             openModal('login');
         }
     }
-    updateAuthLinks();
+
+    // 在页面加载时检查本地存储中的令牌
+    window.onload = async () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const response = await fetch('http://localhost:5000/api/user', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    currentUser = data;
+                    updateAuthLinks();
+                }
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+        }
+    };
 </script>
 </body>
 </html>

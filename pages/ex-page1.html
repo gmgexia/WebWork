@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开封的故事</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            width: 100%;
+            font-family: "黑体", sans-serif; /* 字体改为黑体 */
+            background-color: #F1E0A7; /* 背景颜色设置为黄连黄 */
+            color: white;
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
+            text-align: center;
+            overflow: hidden; /* 防止页面溢出 */
+        }
+
+        .container {
+            width: 80%;
+            max-width: 900px;
+            padding: 20px;
+            position: relative;
+            z-index: 1; /* 确保container位于背景之上 */
+        }
+
+        .content {
+            font-size: 1.5rem; /* 字体缩小为原来的二分之一 */
+            opacity: 0;
+            animation: fadeInOut 8s forwards;
+            line-height: 1.6;
+            position: absolute;
+            top: 50%; /* 垂直居中 */
+            left: 50%; /* 水平居中 */
+            transform: translate(-50%, -50%); /* 精确居中 */
+            width: 90%; /* 保证文字不超出视窗 */
+        }
+
+        /* 文字渐显和渐隐的效果 */
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+		.back-button {
+		    position: absolute;
+		    top: 20px;
+		    left: 20px;
+		    text-decoration: none;
+		    color: white;
+		    background: rgba(0, 0, 0, 0.7);
+		    padding: 10px 20px;
+		    border-radius: 5px;
+		    text-align: center;
+		    transition: background-color 0.3s ease;
+		}
+		
+		.back-button:hover {
+		    background: rgba(0, 0, 0, 0.9);
+		}
+    </style>
+</head>
+<body>
+	<a href="javascript:history.back()" class="back-button">返回</a>
+    <div class="container">
+        <div class="content" id="content">
+            开封，历史的余响，旧都依旧散发着古韵。铁塔巍峨，街巷依稀见证着金戈铁马，书香依旧飘散在每一条巷弄。岁月沉淀，风雨无阻，开封的故事，永远在岁月的长河中回荡。
+            <br>你睁开眼睛，发现自己站在一个古老的城市中，四周是熙熙攘攘的市场，空气中弥漫着香料和食物的气味。你意识到自己已来到了南宋的开封。
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('content').addEventListener('animationend', function() {
+            window.location.href = 'ex-page2.html'; // 替换为实际的下一个页面的URL
+        });
+    </script>
+</body>
+</html>

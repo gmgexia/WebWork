@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <title>答题结果</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-image: url('web01.jpg');
+            background-size: cover;
+            color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .result {
+            font-size: 2rem;
+            color: #4CAF50;
+            margin-bottom: 30px;
+        }
+
+        .try-again {
+            font-size: 1.25rem;
+            color: white;
+            background-color: #4CAF50;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .try-again:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>答题结果</h1>
+        <div class="result">
+            <p>你答对了 <span id="correctCount"></span> 道题目！</p>
+        </div>
+        <a href="homePage.html" class="try-again">再试一次</a>
+    </div>
+
+    <script>
+        window.onload = function() {
+            var correctCount = localStorage.getItem('correctCount');
+            document.getElementById('correctCount').textContent = correctCount;
+
+            // 发送答题结果到后端
+            sendResultToBackend(correctCount);
+        }
+
+        function sendResultToBackend(correctCount) {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error('No token found in local storage');
+                return;
+            }
+
+            fetch('http://localhost:5000/api/update-poetry-correct-count', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ correctCount })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (response.ok) {
+                    console.log('Poetry correct count updated successfully:', data.message);
+                } else {
+                    console.error('Failed to update poetry correct count:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error updating poetry correct count:', error);
+            });
+        }
+    </script>
+</body>
+
+</html>
+
+
+

@@ -3,136 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>网页示例</title>
-    <meta name="description" content="穿越到宋朝，在汴梁和临安之间选择诉说它们的历史与故事。">
+    <title>汴梁城</title>
     <style>
-        body, html {
+        * {
             margin: 0;
             padding: 0;
-            width: 100%;
+            box-sizing: border-box;
+        }
+
+        body, html {
             height: 100%;
-            overflow: hidden;
+            width: 100%;
             font-family: Arial, sans-serif;
+            overflow-x: hidden; /* 禁止横向滚动 */
         }
 
         .background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
+            background-image: url('images/qingming1.jpg'); /* 替换为实际的背景图片路径 */
+            background-size: cover;
+            background-position: center;
             height: 100%;
-            background: url("city.jpg") no-repeat center center/cover; 
-            z-index: -1;
+            position: relative;
+            transition: transform 1s ease; /* 页面过渡动画 */
         }
 
-        .text-container {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 270px; 
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0)); 
-            color: white;
-            padding: 20px;
-            text-align: left; 
-            box-sizing: border-box; 
-        }
-
-        .text-container h2 {
-            margin-top: 0;
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-
-        .options {
-            position: absolute;
-            top: 50%;
-            right: 20px;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .options a {
-            text-decoration: none;
-            color: white;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 30px 180px;
-            border-radius: 5px;
-            text-align: center;
-            font-size: 1.5em; 
-        }
-
-        .options a:hover {
-            background: rgba(0, 0, 0, 0.9);
-        }
-
-        .back-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            text-decoration: none;
-            color: white;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-align: center;
-        }
-
-        .back-button:hover {
-            background: rgba(0, 0, 0, 0.9);
-        }
-
-        .profile-picture {
+        .user-profile {
             position: absolute;
             top: 20px;
             right: 20px;
-            width: 70px;
-            height: 70px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            overflow: hidden;
-            border: 2px solid white;
+            cursor: pointer;
         }
 
-        .profile-picture img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .welcome-text {
+            position: absolute;
+            top: 20%;  /* 修改为靠近左上 */
+            left: -100%;
+            transform: translateY(-50%);
+            font-size: 5rem; /* 增大字体 */
+            font-weight: bold;
+            color: white;
+            animation: slideIn 3s forwards;
         }
 
-        @media (max-width: 768px) {
-            .options a {
-                padding: 20px 100px;
-                font-size: 1.2em; 
+        .explore-text {
+            position: absolute;
+            top: 30%;  /* 新文本位置，原位置 */
+            left: -100%;
+            transform: translateY(-50%);
+            font-size: 3rem; /* 增大字体 */
+            font-weight: bold;
+            color: white;
+            animation: slideInExplore 3s forwards;
+        }
+
+        /* 修改的按钮样式 */
+        .start-explore-btn {
+            position: absolute;
+            top: 90%;  /* 新文本位置，右侧 */
+            right: -70%;  /* 向右移动一点 */
+            transform: translateY(-50%);
+            font-size: 3rem; /* 增大字体 */
+            font-weight: bold;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5); /* 背景色半透明 */
+            border: none;
+            padding: 15px 30px;
+            cursor: pointer;
+            border-radius: 5px; /* 圆角 */
+            animation: slideInRight 3s forwards;
+        }
+
+        .start-explore-btn:hover {
+            background-color: rgba(0, 0, 0, 0.7); /* 按钮悬停效果 */
+        }
+
+        /* 反向动画 */
+        @keyframes slideOut {
+            0% {
+                left: 25%;
+                opacity: 1;
             }
-
-            .profile-picture {
-                width: 50px;
-                height: 50px;
+            100% {
+                left: 100%;
+                opacity: 0; /* 使文字消失 */
             }
         }
+
+        @keyframes slideOutExplore {
+            0% {
+                left: 25%;
+                opacity: 1;
+            }
+            100% {
+                left: 100%;
+                opacity: 0; /* 使文字消失 */
+            }
+        }
+
+        @keyframes slideOutRight {
+            0% {
+                right: 25%;
+                opacity: 1;
+            }
+            100% {
+                right: 100%;
+                opacity: 0; /* 使文字消失 */
+            }
+        }
+
+        @keyframes slideIn {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 25%;
+            }
+        }
+
+        @keyframes slideInExplore {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 25%;
+            }
+        }
+
+        @keyframes slideInRight {
+            0% {
+                right: -100%;
+            }
+            100% {
+                right: 25%;
+            }
+        }
+		.back-button {
+		    position: absolute;
+		    top: 20px;
+		    left: 20px;
+		    text-decoration: none;
+		    color: white;
+		    background: rgba(0, 0, 0, 0.7);
+		    padding: 10px 20px;
+		    border-radius: 5px;
+		    text-align: center;
+		    transition: background-color 0.3s ease;
+		}
+		
+		.back-button:hover {
+		    background: rgba(0, 0, 0, 0.9);
+		}
     </style>
 </head>
 <body>
-    <div class="background"></div>
-    <a href="javascript:history.back()" class="back-button">返回</a>
-    <a href="personalCenter.html" class="profile-picture">
-        <img src="images/avatar.jpg" alt="用户头像">
-    </a>
-    <div class="text-container">
-        <h2>待诉说的故事</h2>
-        <p>假如你穿越到了宋朝，在汴梁和临安之间，你会选择哪一座城市去诉说它们的历史与故事？
-            汴梁，北宋的都城，以其繁华的街市、繁荣的经济和丰富的文化活动而著称，街头巷尾弥
-            漫着浓厚的商业气息和文化氛围。而临安，南宋的都城，坐落在美丽的江南水乡，以其秀
-            丽的自然风光和独特的江南文化闻名，西湖的美景更是让人流连忘返。你会选择哪座城市
-            来探索它的古老风韵和动人故事？</p>
+    <div class="background" id="background">
+		<a href="javascript:history.back()" class="back-button">返回</a>
+        <div class="user-profile">
+            <img src="images/avatar.jpg" alt="用户头像" class="avatar" onclick="redirectToProfile()">
+        </div>
+        <div class="welcome-text" id="welcome-text">
+            欢迎来到汴梁城
+        </div>
+        <div class="explore-text" id="explore-text">
+            开始探索古老宋韵
+        </div>
+        <!-- 将div更改为button并增加样式 -->
+        <button class="start-explore-btn" id="start-explore-text" onclick="startExploring()">
+            点击开始探索
+        </button>
     </div>
-    <div class="options">
-        <a href="page1.html">汴京城里春光好，白玉楼前紫陌长。<br>
-            南陌北街花照眼，东风西月酒盈觞。</a>
-        <a href="page2.html">僧房夜寂听风雨，木叶萧萧落满庭。<br>
-            临安旧事无人记，惟有黄花一度新。</a>
-        <a href="page3.html">缄默不语，不去诉说任何故事。</a>
-    </div>
+
+    <script>
+        function redirectToProfile() {
+            window.location.href = "personalCenter.html";  // 假设个人信息界面为user-profile.html
+        }
+
+        function startExploring() {
+            // 先让所有文字反方向滑走并消失
+            document.getElementById("welcome-text").style.animation = "slideOut 1s forwards";
+            document.getElementById("explore-text").style.animation = "slideOutExplore 1s forwards";
+            document.getElementById("start-explore-text").style.animation = "slideOutRight 1s forwards";
+
+            // 等待动画完成后跳转到下一个页面
+            setTimeout(function() {
+                window.location.href = "pages/ex-page1.html";  // 假设探索页面为explore-page.html
+            }, 1000);  // 等待动画持续时间（1秒后）跳转
+        }
+    </script>
 </body>
 </html>

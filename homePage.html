@@ -26,6 +26,7 @@
             cursor: pointer;
             padding: 1% 2%;
             border-radius: 5px;
+			text-decoration: none;
             transition: text-decoration 0.3s;
         }
         .shell-container {
@@ -103,7 +104,7 @@
 </head>
 <body>
     <div class="nav-buttons">
-        <button class="nav-button" onclick="goBack()">返回</button>
+        <a href="javascript:history.back()" class="nav-button">返回</a>
         <a href="personalCenter.html" class="profile-picture">
             <img src="images/avatar.jpg" alt="用户头像">
         </a>
@@ -113,15 +114,15 @@
             <li class="slogan2">探索宋韵</li>
         </ul>
         <div class="shell">
-            <div class="box-a" onclick="navigateTo('game1')">
+            <div class="box-a" id="game1" onclick="navigateTo('game1')">
                 <img src="images/诗词大会.png" alt="Game 1">
                 <span>诗词大会</span>
             </div>
-            <div class="box-a" onclick="navigateTo('game2')">
+            <div class="box-a" id="game2" onclick="navigateTo('game2')">
                 <img src="images/书画游戏.jpg" alt="Game 2">
                 <span>名胜采风</span>
             </div>
-            <div class="box-a" onclick="navigateTo('game3')">
+            <div class="box-a" id="game3" onclick="navigateTo('game3')">
                 <img src="images/梦回宋朝.png">
                 <span>梦回宋朝</span>
             </div>
@@ -129,28 +130,134 @@
     </div>
 
     <script>
+        this.gamesPlayedMap = new Map();
+
         function navigateTo(page) {
-            switch (page) {
-                case 'game1':
-                    window.location.href = 'poem.html';
-                    break;
-                case 'game2':
-                    window.location.href = 'map.html';
-                    break;
-                case 'game3':
-                    window.location.href = 'textAdventure.html';
-                    break;
-                case 'personal-center':
-                    window.location.href = 'personalCenter.html';
-                    break;
-                default:
-                    console.log('Page not found');
+            const gameElement = document.getElementById(page.replace('game', ''));
+
+            // Check if the game has already been played
+            if (!this.gamesPlayedMap.has(page)) {
+                switch (page) {
+                    case 'game1':
+                        window.location.href = 'poem.html';
+                        break;
+                    case 'game2':
+                        window.location.href = 'map.html';
+                        break;
+                    case 'game3':
+                        window.location.href = 'textAdventure.html';
+                        break;
+                    default:
+                        console.log('Page not found');
+                }
+
+                // Mark the game as played and update progress
+                this.gamesPlayedMap.set(page, true);
+                calculateAndUploadProgress();
+            } else {
+                // Allow user to play the game again without updating progress
+                switch (page) {
+                    case 'game1':
+                        window.location.href = 'poem.html';
+                        break;
+                    case 'game2':
+                        window.location.href = 'map.html';
+                        break;
+                    case 'game3':
+                        window.location.href = 'textAdventure.html';
+                        break;
+                    default:
+                        console.log('Page not found');
+                }
             }
         }
 
         function goBack() {
             window.history.back();
         }
+
+        function calculateAndUploadProgress() {
+            let progressPercentage = 0;
+            if (this.gamesPlayedMap.has('game1')) {
+                progressPercentage += 30;
+            }
+            if (this.gamesPlayedMap.has('game2')) {
+                progressPercentage += 35;
+            }
+            if (this.gamesPlayedMap.has('game3')) {
+                progressPercentage += 35;
+            }
+
+            uploadProgress(progressPercentage);
+        }
+
+        function uploadProgress(progressPercentage) {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                alert('未找到有效的登录凭证，请重新登录');
+                window.location.href = 'login.html'; // 假设登录页面为 login.html
+                return;
+            }
+
+            fetch('http://localhost:5000/api/update-progress', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ progress_percentage: progressPercentage })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                console.log('Progress updated successfully');
+            })
+            .catch(error => {
+                console.error('Error updating progress:', error);
+                alert('无法更新进度，请稍后再试');
+            });
+        }
+
+        // Initialize gamesPlayedMap based on user's current progress
+        function initializeGamesPlayedMap() {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                alert('未找到有效的登录凭证，请重新登录');
+                window.location.href = 'login.html'; // 假设登录页面为 login.html
+                return;
+            }
+
+            fetch('http://localhost:5000/api/user', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const progressPercentage = data.progressPercentage;
+
+                if (progressPercentage >= 30) {
+                    this.gamesPlayedMap.set('game1', true);
+                }
+                if (progressPercentage >= 65) { // 30 + 35
+                    this.gamesPlayedMap.set('game2', true);
+                }
+                if (progressPercentage >= 100) { // 30 + 35 + 35
+                    this.gamesPlayedMap.set('game3', true);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching user data:', error);
+                alert('无法获取用户数据，请稍后再试');
+            });
+        }
+
+        // Call initializeGamesPlayedMap when the page loads
+        window.onload = initializeGamesPlayedMap;
     </script>
 </body>
 </html>

@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>个人中心</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .achievements > * {
+      margin-bottom: 20px; /* 增加每个子元素之间的间距 */
+    }
+    .spacing-div {
+      margin-top: 20px; /* 增加诗词大会称号和藏有佳作之间的间距 */
+    }
+  </style>
 </head>
 <body>
   <a href="javascript:history.back()" id="back-button">
@@ -16,46 +24,183 @@
       <a href="#" id="avatar-link">
         <img src="images/avatar.jpg" alt="用户头像" class="avatar" id="avatar">
       </a>
-      <h2 class="nickname">昵称</h2>
-      <p class="user-id">ID: 123456789</p>
+      <h2 class="nickname" id="nickname"></h2>
+      <p class="user-id" id="user-id"></p>
       <div class="signature">
         <label for="signature-input">个性签名：</label>
         <br>
         <textarea id="signature-input" placeholder="这里填写个性签名..."></textarea>
+        <button type="button">保存</button>
       </div>
     </div>
     <div class="right-column">
       <div class="progress-section">
         <div class="progress-text">已体验进度: </div>
-        <div class="circular-progress" data-percentage="66.6">
-          <span>66.6%</span>
+        <div class="circular-progress" id="progress-circle" data-percentage="0">
+          <span id="progress-percentage">0%</span>
           <div class="progress-bar"></div>
           <div class="progress-border"></div>
         </div>
       </div>
       <div class="achievements">
-        <p>诗词大会称号: <span class="calligraphy">初学吟咏</span></p>
+        <p>诗词大会称号: <span class="calligraphy" id="poetry-title"></span></p>
+        <div class="spacing-div"></div> <!-- 添加额外的间距 -->
         <div class="works-section">
-          <p>藏有佳作: 6/18</p>
+          <p>藏有佳作: <span id="unlocked-paintings-count">0</span>/6</p>
           <button type="button" onclick="window.location.href='gallery.html'">前往画廊 ></button>
         </div>
-        <div class="gallery-preview">
-          <a href="images/work1.jpg" target="_blank"><img src="images/work1.jpg" alt="作品1" class="work-thumbnail"></a>
-          <a href="images/work2.jpg" target="_blank"><img src="images/work2.jpg" alt="作品2" class="work-thumbnail"></a>
-          <a href="images/work3.jpg" target="_blank"><img src="images/work3.jpg" alt="作品3" class="work-thumbnail"></a>
+        <div class="gallery-preview" id="gallery-preview">
+          <!-- 图片将在这里动态插入 -->
         </div>
         <div class="endings-section">
-          <p>达成结局: 3/6</p>
-          <button type="button" onclick="window.location.href='endings.html'">查看结局 ></button>
+          <p>达成成就: <span id="unlocked-endings-count">0</span>/4</p>
+          <button type="button" onclick="window.location.href='endings.html'">查看成就 ></button>
         </div>
-        <div class="endings-preview">
-          <a href="images/ending1.jpg" target="_blank"><img src="images/ending1.jpg" alt="结局1" class="ending-thumbnail"></a>
-          <a href="images/ending2.jpg" target="_blank"><img src="images/ending2.jpg" alt="结局2" class="ending-thumbnail"></a>
-          <a href="images/ending3.jpg" target="_blank"><img src="images/ending3.jpg" alt="结局3" class="ending-thumbnail"></a>
+        <div class="endings-preview" id="endings-preview">
+          <!-- 图片将在这里动态插入 -->
         </div>
       </div>
     </div>
   </div>
-  <script src="scripts.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const token = localStorage.getItem('token'); // 使用 'token' 键名
+      if (!token) {
+        console.error('No access token found in local storage');
+        alert('未找到有效的登录凭证，请重新登录');
+        window.location.href = 'login.html'; // 替换为实际的相对 URL
+        return;
+      }
+
+      fetchUserInfo();
+
+      document.getElementById("back-button").addEventListener("click", function() {
+        history.back();
+      });
+
+      document.getElementById("avatar-link").addEventListener("click", function(event) {
+        event.preventDefault();
+        var avatar = document.getElementById('avatar');
+        var originalSrc = avatar.getAttribute('data-original-src') || avatar.src;
+
+        window.open(originalSrc, '_blank');
+
+        if (avatar.getAttribute('data-original-src')) {
+          avatar.src = avatar.getAttribute('data-original-src');
+          avatar.removeAttribute('data-original-src');
+        } else {
+          avatar.setAttribute('data-original-src', avatar.src);
+          avatar.src = originalSrc;
+        }
+      });
+
+      async function fetchUserInfo() {
+        try {
+          const response = await fetch('http://localhost:5000/api/user', {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          console.log(data);
+
+          populateUserInfo(data);
+        } catch (error) {
+          console.error('Error fetching user info:', error);
+          alert('无法获取用户信息，请稍后再试');
+        }
+      }
+
+      function saveSignature() {
+        console.log('saveSignature called'); // 添加这一行
+        const newSignature = document.getElementById("signature-input").value;
+
+        fetch('http://localhost:5000/api/update-signature', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ signature: newSignature })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Response data:', data);
+          alert(data.message);
+        })
+        .catch(error => {
+          console.error('Error saving signature:', error);
+          alert('无法保存个性签名，请稍后再试');
+        });
+      }
+
+      function populateUserInfo(user) {
+        if (!user) {
+          console.error('User object is undefined or null');
+          return;
+        }
+
+        document.getElementById("nickname").innerText = user.username || '未知';
+        document.getElementById("user-id").innerText = `ID: ${user.id || '未知'}`;
+        document.getElementById("signature-input").value = user.signature || '';
+        document.getElementById("progress-circle").setAttribute('style', `--percentage: ${user.progressPercentage}%`);
+        document.getElementById("progress-percentage").innerText = `${user.progressPercentage || 0}%`;
+        document.getElementById("poetry-title").innerText = user.poetryTitle || '无称号';
+
+        // 更新解锁画作的数量
+        document.getElementById("unlocked-paintings-count").innerText = user.unlockedPaintingsCount;
+
+        // 更新解锁结局的数量
+        document.getElementById("unlocked-endings-count").innerText = user.unlockedEndingsCount;
+
+        // 显示前三个已解锁的画作名字
+        const galleryPreview = document.getElementById("gallery-preview");
+        galleryPreview.innerHTML = ''; // 清空之前的图片
+        const paintings = (user.unlockedPaintings || '').split(',').filter(Boolean);
+
+        console.log('Unlocked paintings:', paintings); // 添加调试日志
+
+        paintings.slice(0, 3).forEach(title => {
+          const div = document.createElement('div');
+          div.className = "work-name";
+          div.innerText = title;
+          div.onclick = () => alert(`你点击了: ${title}`); // 可选：添加点击事件
+          galleryPreview.appendChild(div);
+        });
+
+        // 显示前三个已解锁的结局名字
+        const endingsPreview = document.getElementById("endings-preview");
+        endingsPreview.innerHTML = ''; // 清空之前的图片
+        const endings = (user.unlockedEndings || '').split(',').filter(Boolean);
+
+        console.log('Unlocked endings:', endings); // 添加调试日志
+
+        endings.slice(0, 3).forEach(title => {
+          const div = document.createElement('div');
+          div.className = "ending-name";
+          div.innerText = title;
+          div.onclick = () => alert(`你点击了: ${title}`); // 可选：添加点击事件
+          endingsPreview.appendChild(div);
+        });
+      }
+
+      // 绑定保存签名按钮的点击事件
+      document.getElementById("signature-input").nextElementSibling.addEventListener("click", saveSignature);
+    });
+  </script>
 </body>
 </html>
+
+
+

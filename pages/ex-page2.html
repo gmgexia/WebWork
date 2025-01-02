@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片聚集效果</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
+            background-color: #F1E0A7; /* 背景颜色设置为黄连黄 */
+            overflow: hidden; /* 防止页面溢出 */
+            font-family: "黑体", sans-serif; /* 字体改为黑体 */
+            position: relative; /* 用于定位文字 */
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 60px; /* 增大图片之间的间距 */
+            width: 400px;
+            height: 400px;
+        }
+
+        .image {
+            width: 200px;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            position: relative; /* 使文字浮动在图片上方 */
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: transparent;
+            cursor: pointer; /* 鼠标变为点击手势 */
+            z-index: 1; /* 确保图片在最顶层 */
+        }
+
+        .image1 {
+            background-image: url('baozi.jpg');
+            animation: imageMoveFromLeft 4s forwards;
+        }
+        .image2 {
+            background-image: url('songci.jpg');
+            animation: imageMoveFromTop 4s forwards;
+        }
+        .image3 {
+            background-image: url('sushi.jpg');
+            animation: imageMoveFromRight 4s forwards;
+        }
+        .image4 {
+            background-image: url('shijing.jpg');
+            animation: imageMoveFromBottom 4s forwards;
+        }
+
+        .text {
+            position: absolute;
+            top: 10px; /* 文字距离图片顶部的距离 */
+            left: 50%; /* 文字水平居中 */
+            transform: translateX(-50%); /* 精确居中 */
+            color: transparent; /* 初始颜色为透明 */
+            font-size: 16px;
+        }
+
+        /* 页面顶部文字 */
+        .top-text {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 36px; /* 字体变大 */
+            color: white; /* 字体颜色为白色 */
+            opacity: 0;
+            animation: fadeInText 4s 1s forwards; /* 延迟加载文字 */
+        }
+
+        @keyframes fadeInText {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* 图片从四个方向聚集到中央 */
+        @keyframes imageMoveFromLeft {
+            0% {
+                transform: translateX(-100vw);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes imageMoveFromTop {
+            0% {
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes imageMoveFromRight {
+            0% {
+                transform: translateX(100vw);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes imageMoveFromBottom {
+            0% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* 鼠标悬停时，放大该图片并缩小其它图片，并转换背景颜色为背景色 */
+        .image:hover {
+            transform: scale(1.5); /* 放大 */
+            background-color: #F1E0A7; /* 背景颜色与页面一致 */
+            color: black;
+            background-blend-mode: lighten;
+        }
+
+        /* 图片悬停时，显示文字 */
+        .image:hover .text {
+            color: white; /* 显示文字时文字为白色 */
+        }
+
+        .container .image:hover {
+            transform: scale(1.5) !important; /* 使悬停图片放大 */
+        }
+
+        .container .image:not(:hover) {
+            transform: scale(0.8); /* 其它图片缩小 */
+        }
+
+        /* 右侧的《东京梦华录》文字 */
+        .right-text {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            font-size: 120px; /* 字体大号 */
+            font-family: "黑体", sans-serif; /* 黑体字体 */
+            color: #D2A106; /* 鼬黄颜色 */
+            font-weight: bold;
+            opacity: 0.2; /* 设置透明度为20% */
+        }
+
+        /* 在网页上全屏显示指定的文字 */
+        .full-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px; /* 设置字体大小 */
+            color: #D2A106; /* 设置字体颜色为鼬黄 */
+            text-align: center;
+            padding: 20px;
+            overflow: hidden;
+            white-space: pre-line; /* 保持换行 */
+            opacity: 0.2; /* 设置透明度为20% */
+            z-index: 0; /* 确保文字在图片下方 */
+        }
+		.back-button {
+		    position: absolute;
+		    top: 20px;
+		    left: 20px;
+		    text-decoration: none;
+		    color: white;
+		    background: rgba(0, 0, 0, 0.7);
+		    padding: 10px 20px;
+		    border-radius: 5px;
+		    text-align: center;
+		    transition: background-color 0.3s ease;
+		}
+		
+		.back-button:hover {
+		    background: rgba(0, 0, 0, 0.9);
+		}
+    </style>
+</head>
+<body>
+	<a href="javascript:history.back()" class="back-button">返回</a>
+    <div class="top-text">望着熟悉又陌生的街景，你将目光转向</div> <!-- 新增文字 -->
+    <div class="container">
+        <div class="image image1" onclick="unlockEnding('汴京饿灵', 'page1.html')">
+            <div class="text">让人垂涎三尺的美食</div>
+        </div>
+        <div class="image image2" onclick="unlockEnding('万象伶仃', 'page2.html')">
+            <div class="text">让人叹为观止的瓷器</div>
+        </div>
+        <div class="image image3" onclick="unlockEnding('路过的东坡', 'page3.html')">
+            <div class="text">让人觉得眼熟的路人</div>
+        </div>
+        <div class="image image4" onclick="unlockEnding('三十六行', 'page4.html')">
+            <div class="text">让人心生温暖的闹市</div>
+        </div>
+    </div>
+
+    <div class="right-text">《东京梦华录》</div> <!-- 新增右侧文字 -->
+
+    <!-- 新增的全屏文字展示 -->
+    <div class="full-text">
+        第四卷<br>
+        "百货繁华，钱物聚集，夜市灯火通明，四处传来叫卖声。"<br>
+        这一段描述了汴京夜市的热闹景象，百货充盈，各种商品应有尽有，摊贩的叫卖声此起彼伏，展现了宋代商业繁荣的景象。<br><br>
+
+        第五卷<br>
+        "门前有十里长街，街上铺满了红色的地毯，路两旁是精致的商铺，金银珠宝琳琅满目。"<br>
+        这一段描绘了汴京城市的豪华与商贸的繁荣，商铺的陈列让人眼花缭乱，象征着富庶的宋代社会。<br><br>
+
+        第六卷<br>
+        "四时交替，风光旖旎。秋风起时，梧桐叶落，街头巷尾，人们穿上了新的衣裳，纷纷准备过节。"<br>
+        这一段描写了汴京的四季变化和人们的节令活动，展现了宋代的风土人情和节日氛围。<br><br>
+
+        第七卷<br>
+        "市井中有歌舞场所，常常有艺人表演，歌声绕梁，舞姿翩翩，观众们喜笑颜开。"<br>
+        这段描述了当时宋代汴京的娱乐生活，歌舞表演是城市生活的一部分，反映了人们在繁忙工作之余的娱乐方式。<br><br>
+
+        第十卷<br>
+        "妇人们穿着华美的衣裳，走在街上，低声私语，笑语盈盈。男子们则衣着整齐，步伐稳重，谈笑风生。"
+    </div>
+
+    <script>
+        // 将 unlockEnding 函数移到全局作用域
+        function unlockEnding(endTitle, pageUrl) {
+            const token = localStorage.getItem('token'); // 使用 'token' 键名
+            if (!token) {
+                console.error('No access token found in local storage');
+                alert('未找到有效的登录凭证，请重新登录');
+                window.location.href = 'login.html'; // 替换为实际的相对 URL
+                return;
+            }
+
+            async function sendUnlockRequest() {
+                try {
+                    const response = await fetch('http://localhost:5000/api/unlock-ending', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json; charset=utf-8',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ endingTitle: endTitle })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    console.log(data);
+
+                    // 导航到目标页面
+                    window.location.href = pageUrl;
+                } catch (error) {
+                    console.error('Error unlocking ending:', error);
+                    alert('无法解锁结局，请稍后再试');
+                }
+            }
+
+            sendUnlockRequest();
+        }
+    </script>
+</body>
+</html>
+
+
+

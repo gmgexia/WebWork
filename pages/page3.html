@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>了解名人苏轼</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #2c3e50;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+      position: relative;
+    }
+
+    nav h1 {
+      margin: 0;
+    }
+
+    /* 返回按钮样式 */
+    .back-button {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      padding: 5px 10px;
+      background-color: #34495e;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+
+    .back-button:hover {
+      background-color: #2c3e50;
+    }
+
+    #content {
+      padding: 20px;
+      background-color: #fff;
+      margin-top: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .section-content {
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #2c3e50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #34495e;
+    }
+
+    .button-group {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- 顶部导航栏 -->
+  <header>
+    <!-- 返回按钮 -->
+    <button class="back-button" onclick="window.location.href='ex-page2.html'">返回</button>
+    <nav>
+      <h1>了解名人苏轼</h1>
+    </nav>
+  </header>
+
+  <!-- 内容区 -->
+  <div id="content">
+    <div class="section-title">苏轼生平</div>
+    <div class="section-content">
+      苏轼（1037年－1101年），字子瞻，号东坡居士，北宋时期文学、书法、绘画及政治多才多艺的名人，世称“苏东坡”。他出生在四川眉山，早年聪慧好学，长大后曾仕途多变，最终官至翰林学士。他的诗词、词、文均有极高的艺术成就，并且在书法和绘画方面也具有深远影响。
+    </div>
+
+    <div class="section-title">苏轼的成就</div>
+    <div class="section-content">
+      苏轼不仅在文学上造诣深厚，尤其是在诗、文、词三方面都有杰出的贡献。他的词风大气磅礴，格调豪放，代表作如《念奴娇·赤壁怀古》。此外，他还在书法、绘画上有着卓越的成就，其作品流派被后人推崇。
+    </div>
+
+    <div class="section-title">苏轼的代表作品</div>
+    <div class="section-content">
+      <button onclick="showWorkDetails('赤壁赋')">《赤壁赋》</button>
+      <button onclick="showWorkDetails('念奴娇·赤壁怀古')">《念奴娇·赤壁怀古》</button>
+      <button onclick="showWorkDetails('苏东坡题画')">《苏东坡题画》</button>
+    </div>
+
+    <div id="work-details" style="display:none;">
+      <div class="section-title">作品详情</div>
+      <div class="section-content" id="work-description"></div>
+      <button onclick="hideWorkDetails()">关闭</button>
+    </div>
+  </div>
+
+  <script>
+    // 苏轼的作品介绍
+    const worksDetails = {
+      '赤壁赋': {
+        description: '《赤壁赋》是苏轼在赤壁游览时写的辞章，描绘了赤壁的美景以及他对历史的感慨，展现了苏轼的豪放与豁达。'
+      },
+      '念奴娇·赤壁怀古': {
+        description: '《念奴娇·赤壁怀古》是苏轼的词作之一，表现了他对赤壁古战场的怀古情感，气韵恢弘，哲理深刻。'
+      },
+      '苏东坡题画': {
+        description: '《苏东坡题画》是苏轼在画作上题写的诗文，其中包括对画家的评价、对作品的欣赏，体现了他在艺术上的审美眼光。'
+      }
+    };
+
+    // 显示作品详情
+    function showWorkDetails(workName) {
+      const work = worksDetails[workName];
+      document.getElementById('work-description').innerText = work.description;
+      document.getElementById('work-details').style.display = 'block';
+    }
+
+    // 隐藏作品详情
+    function hideWorkDetails() {
+      document.getElementById('work-details').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

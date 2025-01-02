@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>宋朝美食环节</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #2c3e50;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+      position: relative;
+    }
+
+    nav h1 {
+      margin: 0;
+    }
+
+    #progress {
+      font-size: 18px;
+      margin-top: 10px;
+    }
+
+    /* 返回按钮样式 */
+    .back-button {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      padding: 5px 10px;
+      background-color: #34495e;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+
+    .back-button:hover {
+      background-color: #2c3e50;
+    }
+
+    #food-display {
+      display: flex;
+      justify-content: space-around;
+      padding: 20px;
+    }
+
+    .food-item {
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .food-item img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    #food-details {
+      padding: 20px;
+      background-color: #fff;
+      margin-top: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #2c3e50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #34495e;
+    }
+
+    #cooking-challenge {
+      padding: 20px;
+      background-color: #fff;
+      margin-top: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #ingredients {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .ingredient-item {
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .ingredient-item img {
+      width: 100px;
+      height: 100px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- 顶部导航栏 -->
+  <header>
+    <!-- 修改返回按钮的链接 -->
+    <button class="back-button" onclick="window.location.href='ex-page2.html'">返回</button>
+    <nav>
+      <h1>宋朝美食</h1>
+      <div id="progress">游戏进度: 50%</div>
+    </nav>
+  </header>
+
+  <!-- 美食展示区 -->
+  <section id="food-display">
+    <h2>宋朝美食</h2>
+    <div class="food-item" onclick="showFoodDetails('东坡肉')">
+      <img src="dongporou.jpg" alt="东坡肉">
+      <p>东坡肉</p>
+    </div>
+    <div class="food-item" onclick="showFoodDetails('荔枝酒')">
+      <img src="lizhijiu.jpg" alt="荔枝酒">
+      <p>荔枝酒</p>
+    </div>
+    <div class="food-item" onclick="showFoodDetails('桃花酿')">
+      <img src="taohuaniang.jpg" alt="桃花酿">
+      <p>桃花酿</p>
+    </div>
+  </section>
+
+  <!-- 食物详情 -->
+  <section id="food-details">
+    <h2>食物详情</h2>
+    <p id="food-description">点击选择一种美食了解更多</p>
+    <button onclick="startCooking()">开始烹饪挑战</button>
+  </section>
+
+  <!-- 烹饪挑战 -->
+  <section id="cooking-challenge" style="display:none;">
+    <h2>烹饪挑战</h2>
+    <p>请选择正确的食材制作美食！</p>
+    <div id="ingredients">
+      <!-- 食材选项 -->
+    </div>
+    <button onclick="submitCookingChallenge()">提交挑战</button>
+  </section>
+
+  <script>
+    // 食物的详细信息
+    const foodDetails = {
+      '东坡肉': {
+        description: '东坡肉是一道传统的中国菜，起源于宋代，由苏东坡所创，采用猪肉慢炖...',
+        cookingInstructions: '选择猪肉、老抽、生抽、冰糖等食材，按照步骤慢炖即可。',
+        ingredients: ['猪肉', '老抽', '生抽', '冰糖']
+      },
+      '荔枝': {
+        description: '荔枝是宋朝时期极受欢迎的水果，果肉甘甜多汁，被皇帝和贵族视为珍品...',
+        cookingInstructions: '将新鲜的荔枝剥皮，搭配酒类可做成特色饮品。',
+        ingredients: ['荔枝', '酒', '糖']
+      },
+      '桃花酿': {
+        description: '桃花酿是一种将桃花和美酒结合的传统饮品，味道芳香，象征着春天的来临...',
+        cookingInstructions: '使用桃花、米酒、糖等材料酿制，花香浓郁。',
+        ingredients: ['桃花', '米酒', '糖']
+      }
+    };
+
+    // 食材选项
+    const availableIngredients = {
+      '猪肉': 'zhurou.jpg',
+      '老抽': 'laochou.jpg',
+      '生抽': 'shengchou.jpg',
+      '冰糖': 'bingtang.jpg',
+      '荔枝': 'lizhi.jpg',
+      '酒': 'jiu.jpg',
+      '糖': 'tang.jpg',
+      '米酒': 'mijiu.jpg',
+      '桃花': 'taohua.jpg'
+    };
+
+    // 显示食物详情
+    function showFoodDetails(foodName) {
+      const details = foodDetails[foodName];
+      document.getElementById('food-description').innerHTML = `
+        <strong>名称：</strong>${foodName}<br>
+        <strong>介绍：</strong>${details.description}<br>
+        <strong>烹饪步骤：</strong>${details.cookingInstructions}
+      `;
+      // 隐藏美食详情并显示烹饪挑战
+      document.getElementById('food-details').style.display = 'none';
+      startCookingChallenge(foodName);
+    }
+
+    // 开始烹饪挑战
+    function startCookingChallenge(foodName) {
+      const food = foodDetails[foodName];
+      const ingredientsContainer = document.getElementById('ingredients');
+      ingredientsContainer.innerHTML = ''; // 清空食材容器
+
+      // 随机选择一些食材来作为挑战
+      food.ingredients.forEach(ingredient => {
+        const ingredientItem = document.createElement('div');
+        ingredientItem.classList.add('ingredient-item');
+        ingredientItem.innerHTML = `
+          <img src="${availableIngredients[ingredient]}" alt="${ingredient}" onclick="selectIngredient('${ingredient}')">
+          <p>${ingredient}</p>
+        `;
+        ingredientsContainer.appendChild(ingredientItem);
+      });
+
+      document.getElementById('cooking-challenge').style.display = 'block';
+    }
+
+    // 选择食材
+    let selectedIngredients = [];
+    function selectIngredient(ingredient) {
+      if (selectedIngredients.includes(ingredient)) {
+        alert('该食材已经选择过了');
+        return;
+      }
+      selectedIngredients.push(ingredient);
+      alert(`${ingredient} 已添加到您的食材清单`);
+    }
+
+    // 提交烹饪挑战
+    function submitCookingChallenge() {
+      const foodName = document.getElementById('food-description').innerText.split('：')[1].split('\n')[0];
+      const food = foodDetails[foodName];
+      
+      if (JSON.stringify(selectedIngredients.sort()) === JSON.stringify(food.ingredients.sort())) {
+        alert('烹饪成功！恭喜你制作了这道美食！');
+      } else {
+        alert('挑战失败！食材选择不正确，请再试一次。');
+      }
+
+      // 重置并返回美食详情
+      selectedIngredients = [];
+      document.getElementById('cooking-challenge').style.display = 'none';
+      document.getElementById('food-details').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
