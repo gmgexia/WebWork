@@ -60,12 +60,10 @@
 <div class="container" id="endings-container"></div>
 
 <script>
-    // 获取 token 以便进行身份验证
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-        alert('未找到有效的登录凭证，请重新登录');
-        window.location.href = 'login.html'; // 假设登录页面为 login.html
+    // 从 localStorage 获取已解锁的结局信息
+    function getUnlockedEndings() {
+        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || {};
+        return currentUser.unlockedEndings ? currentUser.unlockedEndings.split(',') : [];
     }
 
     // 定义结局信息对象
@@ -75,37 +73,6 @@
         "路过的东坡": { title: "路过的东坡", comment: "让人觉得眼熟的路人", image: "images/ending3.png" },
         "三十六行": { title: "三十六行", comment: "让人心生温暖的闹市", image: "images/ending4.png" }
     };
-
-    // 获取已解锁的结局信息
-    async function fetchUnlockedEndings() {
-        try {
-            const response = await fetch('http://localhost:5000/api/user', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            console.log(data);
-
-            // 确保 unlockedEndings 是一个字符串
-            const unlockedEndingsString = typeof data.unlockedEndings === 'string' ? data.unlockedEndings : '';
-            
-            // 将 unlockedEndings 字符串转换为数组
-            const unlockedEndings = unlockedEndingsString.split(',').filter(Boolean);
-
-            // 渲染成就信息
-            renderEndings(unlockedEndings);
-        } catch (error) {
-            console.error('Error fetching unlocked endings:', error);
-            alert('无法获取已解锁的成就信息，请稍后再试');
-        }
-    }
 
     // 根据已解锁的结局名称从 endings 对象中提取详细信息并渲染到页面
     function renderEndings(unlockedTitles) {
@@ -146,12 +113,11 @@
         });
     }
 
-    // 初始化时获取并渲染已解锁的成就
-    fetchUnlockedEndings();
+    // 初始化时渲染已解锁的成就
+    document.addEventListener("DOMContentLoaded", function() {
+        const unlockedEndings = getUnlockedEndings();
+        renderEndings(unlockedEndings);
+    });
 </script>
-
 </body>
 </html>
-
-
-

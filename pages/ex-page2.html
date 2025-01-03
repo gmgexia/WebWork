@@ -253,46 +253,52 @@
         "妇人们穿着华美的衣裳，走在街上，低声私语，笑语盈盈。男子们则衣着整齐，步伐稳重，谈笑风生。"
     </div>
 
-    <script>
-        // 将 unlockEnding 函数移到全局作用域
-        function unlockEnding(endTitle, pageUrl) {
-            const token = localStorage.getItem('token'); // 使用 'token' 键名
-            if (!token) {
-                console.error('No access token found in local storage');
-                alert('未找到有效的登录凭证，请重新登录');
-                window.location.href = 'login.html'; // 替换为实际的相对 URL
-                return;
-            }
-
-            async function sendUnlockRequest() {
-                try {
-                    const response = await fetch('http://localhost:5000/api/unlock-ending', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json; charset=utf-8',
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify({ endingTitle: endTitle })
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-                    console.log(data);
-
-                    // 导航到目标页面
-                    window.location.href = pageUrl;
-                } catch (error) {
-                    console.error('Error unlocking ending:', error);
-                    alert('无法解锁结局，请稍后再试');
-                }
-            }
-
-            sendUnlockRequest();
+<script>
+    // 模拟解锁新结局，保存到本地并允许重复访问
+    function unlockEnding(endingTitle, pageUrl) {
+        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || {};
+        let unlockedEndings = currentUser.unlockedEndings ? currentUser.unlockedEndings.split(',') : [];
+        
+        if (!unlockedEndings.includes(endingTitle)) {
+            unlockedEndings.push(endingTitle);
+            currentUser.unlockedEndings = unlockedEndings.join(',');
+            currentUser.unlockedEndingsCount = unlockedEndings.length;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            console.log('Ending unlocked and saved to localStorage:', endingTitle);
+            alert(`成功解锁结局: ${endingTitle}`);
+        } else {
+            console.log('Ending already unlocked:', endingTitle);
+            alert(`您已经解锁过这个结局: ${endingTitle}`);
         }
-    </script>
+
+        // 无论是否解锁，都导航到目标页面
+        window.location.href = pageUrl;
+    }
+
+    // 页面加载时检查并显示已解锁的结局
+    window.onload = function() {
+        loadUserInfo();
+    };
+
+    function loadUserInfo() {
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) {
+            console.error('No user data found in localStorage');
+            alert('未找到用户数据，请重新登录');
+            return;
+        }
+
+        populateUserInfo(currentUser);
+    }
+
+    function populateUserInfo(user) {
+        // 更新解锁结局的数量
+        document.getElementById("unlocked-endings-count").innerText = user.unlockedEndingsCount || 0;
+
+        // 如果有需要，这里可以更新其他用户信息
+        // 注意：确保在HTML中存在对应id的元素
+    }
+</script>
 </body>
 </html>
 

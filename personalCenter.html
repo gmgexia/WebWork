@@ -30,7 +30,7 @@
         <label for="signature-input">个性签名：</label>
         <br>
         <textarea id="signature-input" placeholder="这里填写个性签名..."></textarea>
-        <button type="button">保存</button>
+        <button type="button" onclick="saveSignature()">保存</button>
       </div>
     </div>
     <div class="right-column">
@@ -62,145 +62,174 @@
       </div>
     </div>
   </div>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const token = localStorage.getItem('token'); // 使用 'token' 键名
-      if (!token) {
-        console.error('No access token found in local storage');
-        alert('未找到有效的登录凭证，请重新登录');
-        window.location.href = 'login.html'; // 替换为实际的相对 URL
-        return;
-      }
 
-      fetchUserInfo();
+<script>
+// 将 unlockEnding 函数移到全局作用域，确保所有页面都可以访问
+function unlockEnding(endTitle, pageUrl) {
+  let unlockedEndings = localStorage.getItem('unlockedEndings') || '';
+  const endings = unlockedEndings.split(',').filter(Boolean);
 
-      document.getElementById("back-button").addEventListener("click", function() {
-        history.back();
-      });
+  if (!endings.includes(endTitle)) {
+    unlockedEndings += (unlockedEndings ? ',' : '') + endTitle;
+    localStorage.setItem('unlockedEndings', unlockedEndings);
 
-      document.getElementById("avatar-link").addEventListener("click", function(event) {
-        event.preventDefault();
-        var avatar = document.getElementById('avatar');
-        var originalSrc = avatar.getAttribute('data-original-src') || avatar.src;
+    let currentUser = JSON.parse(localStorage.getItem('currentUser')) || {};
+    currentUser.unlockedEndingsCount = (currentUser.unlockedEndingsCount || 0) + 1;
+    currentUser.unlockedEndings = unlockedEndings;
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+  }
 
-        window.open(originalSrc, '_blank');
+  window.location.href = `${pageUrl}?newEnding=${encodeURIComponent(endTitle)}`;
+}
 
-        if (avatar.getAttribute('data-original-src')) {
-          avatar.src = avatar.getAttribute('data-original-src');
-          avatar.removeAttribute('data-original-src');
-        } else {
-          avatar.setAttribute('data-original-src', avatar.src);
-          avatar.src = originalSrc;
-        }
-      });
+document.addEventListener("DOMContentLoaded", function() {
+  // 初始化页面时加载用户信息
+  loadUserInfo();
 
-      async function fetchUserInfo() {
-        try {
-          const response = await fetch('http://localhost:5000/api/user', {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          });
+  document.getElementById("back-button").addEventListener("click", function() {
+    history.back();
+  });
 
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
+  document.getElementById("avatar-link").addEventListener("click", function(event) {
+    event.preventDefault();
+    var avatar = document.getElementById('avatar');
+    var originalSrc = avatar.getAttribute('data-original-src') || avatar.src;
 
-          const data = await response.json();
-          console.log(data);
+    window.open(originalSrc, '_blank');
 
-          populateUserInfo(data);
-        } catch (error) {
-          console.error('Error fetching user info:', error);
-          alert('无法获取用户信息，请稍后再试');
-        }
-      }
+    if (avatar.getAttribute('data-original-src')) {
+      avatar.src = avatar.getAttribute('data-original-src');
+      avatar.removeAttribute('data-original-src');
+    } else {
+      avatar.setAttribute('data-original-src', avatar.src);
+      avatar.src = originalSrc;
+    }
+  });
+});
 
-      function saveSignature() {
-        console.log('saveSignature called'); // 添加这一行
-        const newSignature = document.getElementById("signature-input").value;
+function saveSignature() {
+  const newSignature = document.getElementById("signature-input").value;
+  let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  if (currentUser) {
+    currentUser.signature = newSignature;
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    alert('个性签名保存成功！');
+    populateUserInfo(currentUser); // 更新页面上的个性签名显示
+  } else {
+    console.error('No user data found in localStorage');
+    alert('未找到用户数据，请重新登录');
+  }
+}
 
-        fetch('http://localhost:5000/api/update-signature', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ signature: newSignature })
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then(data => {
-          console.log('Response data:', data);
-          alert(data.message);
-        })
-        .catch(error => {
-          console.error('Error saving signature:', error);
-          alert('无法保存个性签名，请稍后再试');
-        });
-      }
+function loadUserInfo() {
+  let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  if (!currentUser) {
+    console.error('No user data found in localStorage');
+    alert('未找到用户数据，请重新登录');
+    return;
+  }
 
-      function populateUserInfo(user) {
-        if (!user) {
-          console.error('User object is undefined or null');
-          return;
-        }
+  populateUserInfo(currentUser);
 
-        document.getElementById("nickname").innerText = user.username || '未知';
-        document.getElementById("user-id").innerText = `ID: ${user.id || '未知'}`;
-        document.getElementById("signature-input").value = user.signature || '';
-        document.getElementById("progress-circle").setAttribute('style', `--percentage: ${user.progressPercentage}%`);
-        document.getElementById("progress-percentage").innerText = `${user.progressPercentage || 0}%`;
-        document.getElementById("poetry-title").innerText = user.poetryTitle || '无称号';
+  // 处理从其他页面传递过来的新解锁结局
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('newEnding')) {
+    let newEnding = urlParams.get('newEnding');
 
-        // 更新解锁画作的数量
-        document.getElementById("unlocked-paintings-count").innerText = user.unlockedPaintingsCount;
+    // 更新 currentUser 数据中的解锁结局计数
+    currentUser.unlockedEndingsCount = (currentUser.unlockedEndingsCount || 0) + 1;
+    let unlockedEndings = (currentUser.unlockedEndings || '') + (currentUser.unlockedEndings ? ',' : '') + newEnding;
+    currentUser.unlockedEndings = unlockedEndings;
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
 
-        // 更新解锁结局的数量
-        document.getElementById("unlocked-endings-count").innerText = user.unlockedEndingsCount;
+    // 更新页面以反映新的解锁结局
+    populateUserInfo(currentUser);
 
-        // 显示前三个已解锁的画作名字
-        const galleryPreview = document.getElementById("gallery-preview");
-        galleryPreview.innerHTML = ''; // 清空之前的图片
-        const paintings = (user.unlockedPaintings || '').split(',').filter(Boolean);
+    // 移除 URL 中的查询参数以避免重复应用
+    history.replaceState({}, document.title, window.location.pathname);
+  }
+}
 
-        console.log('Unlocked paintings:', paintings); // 添加调试日志
+function populateUserInfo(user) {
+  const poetryCorrectCount = user.poetry_correct_count || 0;
 
-        paintings.slice(0, 3).forEach(title => {
-          const div = document.createElement('div');
-          div.className = "work-name";
-          div.innerText = title;
-          div.onclick = () => alert(`你点击了: ${title}`); // 可选：添加点击事件
-          galleryPreview.appendChild(div);
-        });
+  let poetryTitle = '';
+  if (poetryCorrectCount < 5) {
+    poetryTitle = '初学吟咏';
+  } else if (poetryCorrectCount >= 5 && poetryCorrectCount < 10) {
+    poetryTitle = '新刃发硎';
+  } else if (poetryCorrectCount >= 10 && poetryCorrectCount < 15) {
+    poetryTitle = '诗才横溢';
+  } else if (poetryCorrectCount >= 15 && poetryCorrectCount < 20) {
+    poetryTitle = '文采斐然';
+  } else {
+    poetryTitle = '诗仙词圣';
+  }
 
-        // 显示前三个已解锁的结局名字
-        const endingsPreview = document.getElementById("endings-preview");
-        endingsPreview.innerHTML = ''; // 清空之前的图片
-        const endings = (user.unlockedEndings || '').split(',').filter(Boolean);
+  document.getElementById("nickname").innerText = user.username || '未知';
+  document.getElementById("user-id").innerText = `ID: ${user.id || '未知'}`;
+  document.getElementById("signature-input").value = user.signature || '';
 
-        console.log('Unlocked endings:', endings); // 添加调试日志
+  updateProgressCircle(user.progressPercentage);
 
-        endings.slice(0, 3).forEach(title => {
-          const div = document.createElement('div');
-          div.className = "ending-name";
-          div.innerText = title;
-          div.onclick = () => alert(`你点击了: ${title}`); // 可选：添加点击事件
-          endingsPreview.appendChild(div);
-        });
-      }
+  document.getElementById("poetry-title").innerText = poetryTitle; // 设置诗词大会称号
 
-      // 绑定保存签名按钮的点击事件
-      document.getElementById("signature-input").nextElementSibling.addEventListener("click", saveSignature);
-    });
-  </script>
+  document.getElementById("unlocked-paintings-count").innerText = user.unlockedPaintingsCount || 0;
+
+  document.getElementById("unlocked-endings-count").innerText = user.unlockedEndingsCount || 0;
+
+  const galleryPreview = document.getElementById("gallery-preview");
+  galleryPreview.innerHTML = ''; // 清空之前的图片
+  const paintings = (user.unlockedPaintings || '').split(',').filter(Boolean);
+
+  paintings.slice(0, 3).forEach(title => {
+    const div = document.createElement('div');
+    div.className = "work-name";
+    div.innerText = title;
+    div.onclick = () => alert(`你点击了: ${title}`);
+    galleryPreview.appendChild(div);
+  });
+
+  const endingsPreview = document.getElementById("endings-preview");
+  endingsPreview.innerHTML = ''; // 清空之前的图片
+  const endings = (user.unlockedEndings || '').split(',').filter(Boolean);
+
+  endings.slice(0, 3).forEach(title => {
+    const div = document.createElement('div');
+    div.className = "ending-name";
+    div.innerText = title;
+    div.onclick = () => alert(`你点击了: ${title}`);
+    endingsPreview.appendChild(div);
+  });
+
+  user.poetryTitle = poetryTitle;
+  localStorage.setItem('currentUser', JSON.stringify(user));
+}
+
+function updateProgressCircle(progressPercentage) {
+  let progressCircle = document.getElementById('progress-circle');
+  let currentPercentage = parseInt(progressCircle.getAttribute('data-percentage') || 0);
+  const duration = 1000; // 动画持续时间（毫秒）
+  const startTime = performance.now();
+
+  function animate(currentTime) {
+    let elapsedTime = currentTime - startTime;
+    let newPercentage = Math.min(
+      currentPercentage + (progressPercentage - currentPercentage) * (elapsedTime / duration),
+      progressPercentage
+    );
+
+    progressCircle.setAttribute('data-percentage', `${newPercentage}`);
+    document.getElementById("progress-percentage").innerText = `${Math.round(newPercentage)}%`;
+    progressCircle.style.setProperty('--percentage', newPercentage);
+
+    if (elapsedTime < duration) {
+      requestAnimationFrame(animate);
+    }
+  }
+
+  requestAnimationFrame(animate);
+}
+</script>
 </body>
 </html>
-
-
-

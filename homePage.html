@@ -130,134 +130,99 @@
     </div>
 
     <script>
-        this.gamesPlayedMap = new Map();
-
-        function navigateTo(page) {
-            const gameElement = document.getElementById(page.replace('game', ''));
-
-            // Check if the game has already been played
-            if (!this.gamesPlayedMap.has(page)) {
-                switch (page) {
-                    case 'game1':
-                        window.location.href = 'poem.html';
-                        break;
-                    case 'game2':
-                        window.location.href = 'map.html';
-                        break;
-                    case 'game3':
-                        window.location.href = 'textAdventure.html';
-                        break;
-                    default:
-                        console.log('Page not found');
-                }
-
-                // Mark the game as played and update progress
-                this.gamesPlayedMap.set(page, true);
-                calculateAndUploadProgress();
-            } else {
-                // Allow user to play the game again without updating progress
-                switch (page) {
-                    case 'game1':
-                        window.location.href = 'poem.html';
-                        break;
-                    case 'game2':
-                        window.location.href = 'map.html';
-                        break;
-                    case 'game3':
-                        window.location.href = 'textAdventure.html';
-                        break;
-                    default:
-                        console.log('Page not found');
-                }
-            }
-        }
-
-        function goBack() {
-            window.history.back();
-        }
-
-        function calculateAndUploadProgress() {
-            let progressPercentage = 0;
-            if (this.gamesPlayedMap.has('game1')) {
-                progressPercentage += 30;
-            }
-            if (this.gamesPlayedMap.has('game2')) {
-                progressPercentage += 35;
-            }
-            if (this.gamesPlayedMap.has('game3')) {
-                progressPercentage += 35;
-            }
-
-            uploadProgress(progressPercentage);
-        }
-
-        function uploadProgress(progressPercentage) {
-            const token = localStorage.getItem('token');
-
-            if (!token) {
-                alert('未找到有效的登录凭证，请重新登录');
-                window.location.href = 'login.html'; // 假设登录页面为 login.html
-                return;
-            }
-
-            fetch('http://localhost:5000/api/update-progress', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ progress_percentage: progressPercentage })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                console.log('Progress updated successfully');
-            })
-            .catch(error => {
-                console.error('Error updating progress:', error);
-                alert('无法更新进度，请稍后再试');
-            });
-        }
-
-        // Initialize gamesPlayedMap based on user's current progress
-        function initializeGamesPlayedMap() {
-            const token = localStorage.getItem('token');
-
-            if (!token) {
-                alert('未找到有效的登录凭证，请重新登录');
-                window.location.href = 'login.html'; // 假设登录页面为 login.html
-                return;
-            }
-
-            fetch('http://localhost:5000/api/user', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                const progressPercentage = data.progressPercentage;
-
-                if (progressPercentage >= 30) {
-                    this.gamesPlayedMap.set('game1', true);
-                }
-                if (progressPercentage >= 65) { // 30 + 35
-                    this.gamesPlayedMap.set('game2', true);
-                }
-                if (progressPercentage >= 100) { // 30 + 35 + 35
-                    this.gamesPlayedMap.set('game3', true);
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching user data:', error);
-                alert('无法获取用户数据，请稍后再试');
-            });
-        }
-
-        // Call initializeGamesPlayedMap when the page loads
-        window.onload = initializeGamesPlayedMap;
+ // 假设我们有一个全局对象来保存游戏进度
+ window.appState = {
+     gamesPlayedMap: new Map(),
+ };
+ 
+ function navigateTo(page) {
+     // 检查游戏是否已经玩过
+     if (!appState.gamesPlayedMap.has(page)) {
+         switch (page) {
+             case 'game1':
+                 window.location.href = 'poem.html';
+                 break;
+             case 'game2':
+                 window.location.href = 'map.html';
+                 break;
+             case 'game3':
+                 window.location.href = 'textAdventure.html';
+                 break;
+             default:
+                 console.log('Page not found');
+         }
+ 
+         // 标记游戏为已玩并更新进度
+         appState.gamesPlayedMap.set(page, true);
+         updateProgress(); // 更新进度并保存到本地
+     } else {
+         // 允许用户再次玩游戏而不更新进度
+         switch (page) {
+             case 'game1':
+                 window.location.href = 'poem.html';
+                 break;
+             case 'game2':
+                 window.location.href = 'map.html';
+                 break;
+             case 'game3':
+                 window.location.href = 'textAdventure.html';
+                 break;
+             default:
+                 console.log('Page not found');
+         }
+     }
+ }
+ 
+ function goBack() {
+     window.history.back();
+ }
+ 
+ function calculateProgress() {
+     let progressPercentage = 0;
+     if (appState.gamesPlayedMap.has('game1')) {
+         progressPercentage += 30;
+     }
+     if (appState.gamesPlayedMap.has('game2')) {
+         progressPercentage += 35;
+     }
+     if (appState.gamesPlayedMap.has('game3')) {
+         progressPercentage += 35;
+     }
+     return progressPercentage;
+ }
+ 
+ function updateProgress() {
+     // 计算新的进度百分比
+     const progressPercentage = calculateProgress();
+ 
+     // 获取当前用户的进度信息
+     let currentUser = JSON.parse(localStorage.getItem('currentUser')) || {};
+     
+     // 更新用户的进度百分比和其他相关信息
+     currentUser.progressPercentage = progressPercentage;
+     currentUser.gamesPlayed = Array.from(appState.gamesPlayedMap.keys());
+ 
+     // 保存更新后的用户信息回 localStorage
+     localStorage.setItem('currentUser', JSON.stringify(currentUser));
+ 
+     // 如果需要在页面上显示进度，可以在这里更新DOM
+     // 例如：document.getElementById("progress-percentage").innerText = `${progressPercentage}%`;
+ }
+ 
+ function loadProgressFromLocal() {
+     const storedUser = localStorage.getItem('currentUser');
+     if (storedUser) {
+         const user = JSON.parse(storedUser);
+         user.gamesPlayed.forEach(game => appState.gamesPlayedMap.set(game, true));
+         // 更新appState的进度百分比，但实际值应从user对象获取
+         // 因为它可能是最新的来源。
+         // 注意，这里不直接设置appState.progressPercentage，因为我们不再使用这个成员。
+         console.log(`Loaded progress with ${user.progressPercentage}% completed.`);
+     }
+ }
+ 
+ // 初始化页面加载时的进度
+ window.onload = loadProgressFromLocal;
     </script>
 </body>
 </html>

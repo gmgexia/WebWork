@@ -59,44 +59,25 @@
 
     <script>
         window.onload = function() {
-            var correctCount = localStorage.getItem('correctCount');
+            // 从 localStorage 获取答题正确数
+            var correctCount = localStorage.getItem('correctCount') || 0;
             document.getElementById('correctCount').textContent = correctCount;
 
-            // 发送答题结果到后端
-            sendResultToBackend(correctCount);
+            // 更新用户的总正确题目数
+            updateTotalCorrectCount(correctCount);
         }
 
-        function sendResultToBackend(correctCount) {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                console.error('No token found in local storage');
-                return;
-            }
+        function updateTotalCorrectCount(newCorrectCount) {
+            // 从 localStorage 获取当前的总正确题目数
+            var totalCorrectCount = parseInt(localStorage.getItem('totalCorrectCount')) || 0;
 
-            fetch('http://localhost:5000/api/update-poetry-correct-count', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ correctCount })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (response.ok) {
-                    console.log('Poetry correct count updated successfully:', data.message);
-                } else {
-                    console.error('Failed to update poetry correct count:', data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error updating poetry correct count:', error);
-            });
+            // 更新并保存新的总正确题目数到 localStorage
+            totalCorrectCount += parseInt(newCorrectCount);
+            localStorage.setItem('totalCorrectCount', totalCorrectCount);
+
+            console.log('Updated total correct count to:', totalCorrectCount);
         }
     </script>
 </body>
 
 </html>
-
-
-

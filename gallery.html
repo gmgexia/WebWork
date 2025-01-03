@@ -59,52 +59,35 @@
 <div class="container" id="gallery-container"></div>
 
 <script>
-    // 获取 token 以便进行身份验证
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-        alert('未找到有效的登录凭证，请重新登录');
-        window.location.href = 'login.html'; // 假设登录页面为 login.html
-    }
-
     // 定义画作信息对象
     const artworks = {
         "临安": {
             "晴": { title: "出水芙蓉图", comment: "《出水芙蓉图》绘出水荷花一朵，淡红色晕染，花下衬以绿叶，叶下荷梗三枝。作者用俯视特写的手法，描绘出荷花的雍容外貌和出淤泥而不染的特质。全图笔法精工，设色艳丽，不见墨笔勾痕，是南宋院体画中的精品。", image: "images/work1.jpg" },
-			"雨": { title: "踏歌图", comment: "《踏歌图》中，作者表现了雨后天晴的京城郊外景色，同时也反映出丰收之年，农民在田埂上踏歌而行的欢乐情景。《踏歌图》上端显著位置有题诗：“宿雨清畿甸，朝阳丽帝城。丰年人乐业，垄上踏歌行。”", image: "images/work4.jpg" },
+            "雨": { title: "踏歌图", comment: "《踏歌图》中，作者表现了雨后天晴的京城郊外景色，同时也反映出丰收之年，农民在田埂上踏歌而行的欢乐情景。《踏歌图》上端显著位置有题诗：“宿雨清畿甸，朝阳丽帝城。丰年人乐业，垄上踏歌行。”", image: "images/work4.jpg" },
         },
         "华原": {
             "雨": { title: "溪山行旅图", comment: "《溪山行旅图》是北宋范宽创作的一幅绢本墨笔画，现藏于台北故宫博物院。该图主体部分为巍峨高耸的山体，高山仰止，壮气夺人。山顶丛林茂盛，山谷深处一瀑如线，飞流百丈。山峰下巨岩突兀，林木挺直。画面前景溪水奔流，山径上一队运载货物的商旅缘溪行进，为幽静的山林增添了生气。", image: "images/work3.jpg" },
-			"雪": { title: "雪景寒林图", comment: "《雪景寒林图》描写北方冬日山川雪后壮美景象。图中通过群峰屏立，山势高耸，深谷寒柯间，萧寺掩映；古木结林，板桥寒泉，流水从远方迂回而下，峰峦沟壑间云气万千，真实生动地表现了秦陇山川雪后的磅礴气象。全画布置严整有序，笔墨质朴厚重。画家用“抢笔”笔法，密点攒簇，并参以短条子的笔道，来刻画北方山石的质感，使画面浑厚滋润，沉着典雅。", image: "images/work5.jpg" }
+            "雪": { title: "雪景寒林图", comment: "《雪景寒林图》描写北方冬日山川雪后壮美景象。图中通过群峰屏立，山势高耸，深谷寒柯间，萧寺掩映；古木结林，板桥寒泉，流水从远方迂回而下，峰峦沟壑间云气万千，真实生动地表现了秦陇山川雪后的磅礴气象。全画布置严整有序，笔墨质朴厚重。画家用“抢笔”笔法，密点攒簇，并参以短条子的笔道，来刻画北方山石的质感，使画面浑厚滋润，沉着典雅。", image: "images/work5.jpg" }
         },
         "绍兴": {
             "阴": { title: "泼墨仙人图", comment: "《泼墨仙人图》画面上的形象是一位袒胸露怀的“仙人”，宽衣大肚，憨态可掬，用酣畅的泼墨画法，绘出仙人步履蹒跚的醉态，其脸部的眉、眼、鼻、嘴拥成一团，下巴胡子邋遢，用简括细笔夸张地画出形象奇怪生动，似有幽默感的沉醉神情。该画作是现存最早的一幅泼墨写意人物画，是对传统线型经典语言的背离，是墨象语言真正独立的标志。", image: "images/work2.jpg" },
         },
-		"汴京": {
-		    "晴": {
-		        title: "清明上河图", comment: "清明上河图，中国十大传世名画之一。为北宋风俗画，北宋画家张择端仅见的存世精品，属国宝级文物，现藏于北京故宫博物院。清明上河图宽24.8厘米、长528.7厘米，绢本设色。作品以长卷形式，采用散点透视构图法，生动记录了中国十二世纪北宋都城东京（又称汴京，今河南开封）的城市面貌和当时社会各阶层人民的生活状况，是北宋时期都城东京当年繁荣的见证，也是北宋城市经济情况的写照。这在中国乃至世界绘画史上都是独一无二的。在五米多长的画卷里，共绘制了数量庞大的各色人物，牛、骡、驴等牲畜，车、轿、大小船只，房屋、桥梁、城楼等各有特色，体现了宋代建筑的特征。具有很高的历史价值和艺术价值。", image: "images/qingming2.jpg" },
-		}
+        "汴京": {
+            "晴": {
+                title: "清明上河图", comment: "清明上河图，中国十大传世名画之一。为北宋风俗画，北宋画家张择端仅见的存世精品，属国宝级文物，现藏于北京故宫博物院。清明上河图宽24.8厘米、长528.7厘米，绢本设色。作品以长卷形式，采用散点透视构图法，生动记录了中国十二世纪北宋都城东京（又称汴京，今河南开封）的城市面貌和当时社会各阶层人民的生活状况，是北宋时期都城东京当年繁荣的见证，也是北宋城市经济情况的写照。这在中国乃至世界绘画史上都是独一无二的。在五米多长的画卷里，共绘制了数量庞大的各色人物，牛、骡、驴等牲畜，车、轿、大小船只，房屋、桥梁、城楼等各有特色，体现了宋代建筑的特征。具有很高的历史价值和艺术价值。", image: "images/qingming2.jpg" },
+        }
     };
 
     // 获取已解锁的画作信息
-    async function fetchUnlockedPaintings() {
+    function fetchUnlockedPaintingsFromLocalStorage() {
         try {
-            const response = await fetch('http://localhost:5000/api/user', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                throw new Error('No user data found in localStorage');
             }
 
-            const data = await response.json();
-            console.log(data);
-
             // 确保 unlockedPaintings 是一个字符串
-            const unlockedPaintingsString = typeof data.unlockedPaintings === 'string' ? data.unlockedPaintings : '';
+            const unlockedPaintingsString = typeof currentUser.unlockedPaintings === 'string' ? currentUser.unlockedPaintings : '';
             
             // 将 unlockedPaintings 字符串转换为数组
             const unlockedPaintings = unlockedPaintingsString.split(',').filter(Boolean);
@@ -112,7 +95,7 @@
             // 渲染画作信息
             renderGallery(unlockedPaintings);
         } catch (error) {
-            console.error('Error fetching unlocked paintings:', error);
+            console.error('Error fetching unlocked paintings from localStorage:', error);
             alert('无法获取已解锁的画作信息，请稍后再试');
         }
     }
@@ -167,8 +150,11 @@
     }
 
     // 初始化时获取并渲染已解锁的画作
-    fetchUnlockedPaintings();
+    fetchUnlockedPaintingsFromLocalStorage();
 </script>
 
 </body>
 </html>
+
+
+

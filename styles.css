@@ -139,6 +139,8 @@ body, html {
 }
 
 .right-column {
+	padding-top: 5%;
+	padding-left: 10%;
   flex-basis: 61.8%;
   align-items: flex-start;
 }
@@ -208,27 +210,14 @@ body, html {
   color: darkred;
 }
 
-.progress-section {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.progress-text {
-  font-size: 1.2em;
-  white-space: nowrap;
-}
-
 .circular-progress {
   position: relative;
   width: 250px;
   height: 250px;
   border-radius: 50%;
   background: 
-    conic-gradient(#50906a var(--percentage), #9eb5c4 0), 
-    conic-gradient(from 0deg at top, transparent 0 var(--percentage), gold 0) 0 0 / 100% 100% no-repeat,
-    conic-gradient(from 0deg at top, gold 0 var(--percentage), transparent 0) 0 0 / 98% 98% no-repeat;
+    conic-gradient(#50906a 0%, #50906a calc(var(--percentage) * 1%), /* 灰色背景 */
+                   #9eb5c4 calc(var(--percentage) * 1%), #9eb5c4 100%); /* 绿色进度 */
   display: flex;
   justify-content: center;
   align-items: center;
